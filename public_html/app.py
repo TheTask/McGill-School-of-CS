@@ -16,23 +16,41 @@ app.config['MYSQL_DATABASE_DB'] = 'cs307-group10-DB'
 app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(app)
 
-#define webpages
+#define webpages to render like this: 
 
 @app.route('/')
 def index():
-    # serve index template
-    return render_template('index.html', name='Joe')
+    return render_template('index.html')
 
 @app.route('/webpage')
 def webpage():
     return render_template('webpage.html')
 
-@app.route('/testmci')
-def testmci():
-    return render_template('testMCI.html')
 
-@app.route('/retrieveFile',methods = ['POST'])
-def retrieveFile(): #take filename as json argument
+@app.route('/editPages')
+def backend():
+    return render_template('backend.html')
+
+
+@app.route('/initRows',methods = ['POST'])
+def initRows():
+    conn = mysql.connect()
+    cursor =conn.cursor()
+
+    query = "SELECT * FROM names_pages_html;"
+    cursor.execute(query)
+
+    ans = ""
+    for row in cursor.fetchall():
+        ans += "<tr><td><a id=" + str(row[1])+ " href = # onclick=loadMCIcontent(this)>" + str(row[0]) + "</a></td></tr>"
+
+    #print(ans)
+    return ans
+
+
+
+@app.route('/retrieveFile',methods = ['POST'])  #call this from frontend to retrieve the contents of file, see testmci.html for example
+def retrieveFile():                             #take filename as argument
     filename = os.getcwd() + "/templates/" + request.form.get( 'filename' )
     return Path( filename ).read_text()
 

@@ -5,13 +5,13 @@
     <title>McGill School of Computer Science</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" type="image/x-con" href="./static/favicon1.ico">
-    <link rel="stylesheet" type="text/css" href="./final_project/myStyleSheet.css">
+    <link rel="stylesheet" type="text/css" href="./myStyleSheet.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script>
       var show = 0;
       function hamburger(x){
         x.classList.toggle("change");
-        //document.getElementById("myDropDown").classList.toggle("show");
+        document.getElementById("myDropDown").classList.toggle("show");
         if(show == 0){
           document.getElementById("myDropDown").style.display = "block";
           show = 1;
@@ -24,10 +24,9 @@
   </head>
 
   <body>
-	  <!--PUT THE REUSED SECTIONS ON IN HTML FILES ON THEIR OWN, HEADER.HTML, FOOTER.HTML AND CALL CONTENT OF THESE FILES W/ ASYNC CALLS, SEE MEREK'S EXAMPLE-->
     <!---HEADER OF THE WEBSITE --->
     <div id="header" class="header">
-      <img id="logo" src="./final_project/logo-header.png">
+      <img id="logo" src="logo-header.png">
       <div id="navbar" class="navbar">
         <a>Prospective</a>
         <a>Academic</a>

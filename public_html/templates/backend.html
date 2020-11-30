@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <link rel="shortcut icon" type="image/x-con" href="/static/favicon.ico">
+  <script src="https://cdn.tiny.cloud/1/l0peymszeqahan90ynut0hds27003nt2uikaoyeyf8bdz8vr/tinymce/5/tinymce.min.js" referrerpolicy="origin">
+  </script>
+</head>
+
+
+
+<body>
+   <script>
+	var whichPage = "/pages/samplePage.html";
+
+
+     tinymce.init({
+     selector:'textarea',
+     formats: {
+        bold : {inline : 'b' },
+        italic : {inline : 'i' },
+        underline : {inline : 'u'}
+    },
+     init_instance_callback : function(editor) { editor.setContent('Loaded');}
+   });
+   
+   function ajaxAdd() {
+
+
+   }
+
+   window.onload = function() {
+      //document.getElementById( "newPages" ).innerHTML = "testOnLoad";
+      
+      asyncRequest = new XMLHttpRequest();
+     
+      asyncRequest.addEventListener( "readystatechange",replaceInnerHTMLbackend,false );
+      asyncRequest.open( "POST","/initRows",true );
+      asyncRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      asyncRequest.send()
+   
+   }
+
+   function ajaxLoad() {
+
+      asyncRequest = new XMLHttpRequest();
+                  
+      asyncRequest.addEventListener( "readystatechange",displayResult,false );
+      asyncRequest.open( "POST","/retrieveFile",true );
+      asyncRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      asyncRequest.send( "filename=" + whichPage ) //specify which file to read from in /templates/
+   }
+   function ajaxSave() {
+      asyncRequest = new XMLHttpRequest();
+                  
+      asyncRequest.addEventListener( "readystatechange",savedConfirmation,false );
+      asyncRequest.open( "POST","/saveToFile",true );
+      asyncRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      asyncRequest.send( "filename=" + whichPage + "&data=" + tinyMCE.get('content').getContent() ) //specify which file to read from in /templates/
+      
+      //var ed = tinyMCE.get('content');
+}
+   
+   function replaceInnerHTMLbackend( )
+   {
+	if( asyncRequest.readyState == 4 && asyncRequest.status == 200 )
+      {
+         document.getElementById( "newPages" ).innerHTML =  asyncRequest.responseText;
+      }  
+   }
+
+   function displayResult()
+   {
+      if( asyncRequest.readyState == 4 && asyncRequest.status == 200 )
+      {
+         tinymce.get('content').setContent( asyncRequest.responseText );
+      }  
+   }
+   function savedConfirmation()
+   {
+      if( asyncRequest.readyState == 4 && asyncRequest.status == 200 )
+      {
+          document.getElementById( "saveConfirm" ).innerHTML = asyncRequest.responseText;
+      }  
+   }
+   function loadMCIcontent( element )
+   {
+      asyncRequest = new XMLHttpRequest();
+
+      asyncRequest.addEventListener( "readystatechange",displayResult,false );
+      asyncRequest.open( "POST","/retrieveFile",true );
+      asyncRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      asyncRequest.send( "filename=" + element.id ) //specify which file to read from in /templates/
+      whichPage = element.id;	
+   }
+
+
+</script>
+	<a href="/">go back to homepage</a> </br>
+	<button onclick="ajaxLoad()">Load</button>
+	<button onclick="ajaxSave()">Save</button>
+	<!-- <button onclick="ajaxAdd()">Add</button> -->
+
+
+   <p id="saveConfirm"></p>
+   
+   <form method="post" action="somepage">
+    <textarea id="content" style="width:100%"></textarea>
+   </form>
+
+
+   Here are some test pages:
+   <table id="newPages" style="border:1px solid black"></table> <!-- Generate rows of the table on window load via JS  -->
+</body>
+</html>
