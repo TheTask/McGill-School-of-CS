@@ -47,12 +47,61 @@ def initRows():
     #print(ans)
     return ans
 
+@app.route('/addRow',methods = ['POST'])
+def addRow():
+    conn = mysql.connect()
+    cursor = conn.cursor()
 
+    rowName = str( request.form.get( 'row',default="newPage"))
+    rowNamePath = "/pages/" + rowName + ".html"
+
+    with open( "templates" + rowNamePath,'w' ) as out:
+        out.write( "<p>Type your text here</p>" )
+
+    rowName = "\"" + rowName + "\""
+    rowNamePath = "\"" + rowNamePath + "\""
+
+    query = "INSERT INTO names_pages_html VALUES( " + rowName +","+ rowNamePath +");"
+    # print(query)
+    cursor.execute(query)
+    conn.commit()
+    
+    return ""
+
+
+@app.route('/deleteRow',methods = ['POST'])
+def deleteRow():
+    conn = mysql.connect()
+    cursor = conn.cursor()
+
+    rowName = str( request.form.get( 'row',default=""))
+    rowNamePath = "/pages/" + rowName + ".html"
+
+
+    if os.path.exists( "templates" + rowNamePath):
+        os.remove( "templates" + rowNamePath )
+    
+    rowName = "\"" + rowName + "\""
+
+    query = "DELETE FROM names_pages_html WHERE DisplayName = " + rowName + ";"
+    #print(query)
+    cursor.execute(query)
+    conn.commit()
+
+    return ""
 
 @app.route('/retrieveFile',methods = ['POST'])  #call this from frontend to retrieve the contents of file, see testmci.html for example
 def retrieveFile():                             #take filename as argument
-    filename = os.getcwd() + "/templates/" + request.form.get( 'filename' )
-    return Path( filename ).read_text()
+    req = request.form.get( 'filename' )
+    if( req == "" ):
+        return ""
+    
+    filename =  "templates" + req
+    #print( "FILENAME=" + filename )
+    if( os.path.exists( filename )):
+        return Path( filename ).read_text()
+    else:
+        return ""
 
 @app.route('/saveToFile',methods = ['POST'])
 def saveToFile(): #take filename and content as json args

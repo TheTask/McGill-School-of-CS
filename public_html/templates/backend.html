@@ -10,25 +10,23 @@
 
 <body>
    <script>
-	var whichPage = "/pages/samplePage.html";
-
+	var curPageAddress = "";
+ 	var curPageName = ""
 
      tinymce.init({
      selector:'textarea',
      formats: {
         bold : {inline : 'b' },
         italic : {inline : 'i' },
-        underline : {inline : 'u'}
+        underline : {inline : 'u'},
     },
-     init_instance_callback : function(editor) { editor.setContent('Loaded');}
+     init_instance_callback : function(editor) { editor.setContent("");}
    });
    
-   function ajaxAdd() {
 
-
-   }
-
-   window.onload = function() {
+   window.onload = initRows();
+	
+   function initRows() {
       //document.getElementById( "newPages" ).innerHTML = "testOnLoad";
       
       asyncRequest = new XMLHttpRequest();
@@ -36,8 +34,39 @@
       asyncRequest.addEventListener( "readystatechange",replaceInnerHTMLbackend,false );
       asyncRequest.open( "POST","/initRows",true );
       asyncRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-      asyncRequest.send()
+      asyncRequest.send();
+   }
    
+   function ajaxAdd(){
+      var pageName = document.getElementById("rowName").value;
+      if( pageName != "" )
+      {
+      	 asyncRequest = new XMLHttpRequest();
+        
+      	 asyncRequest.addEventListener( "readystatechange",refreshRows,false );
+      	 asyncRequest.open( "POST","/addRow",true );
+      	 asyncRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      	 asyncRequest.send( "row=" + pageName );
+	 
+	 curPageAddress = "/pages/" + pageName + ".html";
+	 curPageName = pageName;
+	 document.getElementById( "activePageName" ).innerHTML = curPageName;
+      }
+   }
+
+   function ajaxDelete(){
+      
+      if( curPageName != "" )
+      {
+	 //tinymce.get('content').setContent( "" );
+	      
+	 asyncRequest = new XMLHttpRequest();
+        
+         asyncRequest.addEventListener( "readystatechange",refreshRowsDel,false );
+         asyncRequest.open( "POST","/deleteRow",true );
+         asyncRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+         asyncRequest.send( "row=" + curPageName );
+      }
    }
 
    function ajaxLoad() {
@@ -47,7 +76,7 @@
       asyncRequest.addEventListener( "readystatechange",displayResult,false );
       asyncRequest.open( "POST","/retrieveFile",true );
       asyncRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-      asyncRequest.send( "filename=" + whichPage ) //specify which file to read from in /templates/
+      asyncRequest.send( "filename=" + curPageAddress ) //specify which file to read from in /templates/
    }
    function ajaxSave() {
       asyncRequest = new XMLHttpRequest();
@@ -55,16 +84,36 @@
       asyncRequest.addEventListener( "readystatechange",savedConfirmation,false );
       asyncRequest.open( "POST","/saveToFile",true );
       asyncRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-      asyncRequest.send( "filename=" + whichPage + "&data=" + tinyMCE.get('content').getContent() ) //specify which file to read from in /templates/
-      
-      //var ed = tinyMCE.get('content');
+      asyncRequest.send( "filename=" + curPageAddress + "&data=" + tinyMCE.get('content').getContent() ) //specify which file to read from in /templates/
 }
-   
-   function replaceInnerHTMLbackend( )
+   function refreshRows()
    {
 	if( asyncRequest.readyState == 4 && asyncRequest.status == 200 )
+	{
+	   initRows();
+	}
+   }
+
+   function refreshRowsDel()
+   {
+        if( asyncRequest.readyState == 4 && asyncRequest.status == 200 )
+        {
+	   tinymce.get('content').setContent( "" );
+	   document.getElementById( "activePageName" ).innerHTML = "";
+           curPageName = "";
+	   curPageAddress = "";
+           initRows();
+        }
+   }
+
+
+   function replaceInnerHTMLbackend( )
+   {
+      if( asyncRequest.readyState == 4 && asyncRequest.status == 200 )
       {
          document.getElementById( "newPages" ).innerHTML =  asyncRequest.responseText;
+	 document.getElementById( "rowName" ).value = "";
+	 ajaxLoad();
       }  
    }
 
@@ -90,19 +139,23 @@
       asyncRequest.open( "POST","/retrieveFile",true );
       asyncRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
       asyncRequest.send( "filename=" + element.id ) //specify which file to read from in /templates/
-      whichPage = element.id;	
-   }
+      curPageAddress = element.id;
+      curPageName = curPageAddress.substring( 7 );
+      curPageName = curPageName.substring( 0,curPageName.length - 5 );
 
+      document.getElementById( "activePageName" ).innerHTML = curPageName;
+   }
 
 </script>
 	<a href="/">go back to homepage</a> </br>
-	<button onclick="ajaxLoad()">Load</button>
+	<button onclick="ajaxDelete()">Delete</button>
 	<button onclick="ajaxSave()">Save</button>
-	<!-- <button onclick="ajaxAdd()">Add</button> -->
-
+	<button onclick="ajaxAdd()">Add</button>
 
    <p id="saveConfirm"></p>
-   
+
+   Name of the new page to add: <input type="text" id="rowName"></input>
+   <h3 id="activePageName"></h3>
    <form method="post" action="somepage">
     <textarea id="content" style="width:100%"></textarea>
    </form>
