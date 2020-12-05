@@ -10,7 +10,6 @@
 
 <body>
    <script>
-	var curPageAddress = "";
  	var curPageName = ""
 
      tinymce.init({
@@ -26,9 +25,8 @@
 
    window.onload = initRows();
 	
-   function initRows() {
-      //document.getElementById( "newPages" ).innerHTML = "testOnLoad";
-      
+   function initRows() 
+   {
       asyncRequest = new XMLHttpRequest();
      
       asyncRequest.addEventListener( "readystatechange",replaceInnerHTMLbackend,false );
@@ -48,7 +46,6 @@
       	 asyncRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
       	 asyncRequest.send( "row=" + pageName );
 	 
-	 curPageAddress = "/pages/" + pageName + ".html";
 	 curPageName = pageName;
 	 document.getElementById( "activePageName" ).innerHTML = curPageName;
       }
@@ -57,9 +54,7 @@
    function ajaxDelete(){
       
       if( curPageName != "" )
-      {
-	 //tinymce.get('content').setContent( "" );
-	      
+      {   
 	 asyncRequest = new XMLHttpRequest();
         
          asyncRequest.addEventListener( "readystatechange",refreshRowsDel,false );
@@ -76,7 +71,7 @@
       asyncRequest.addEventListener( "readystatechange",displayResult,false );
       asyncRequest.open( "POST","/retrieveFile",true );
       asyncRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-      asyncRequest.send( "filename=" + curPageAddress ) //specify which file to read from in /templates/
+      asyncRequest.send( "filename=" + curPageName ) //specify which file to read from in /templates/
    }
    function ajaxSave() {
       asyncRequest = new XMLHttpRequest();
@@ -84,7 +79,7 @@
       asyncRequest.addEventListener( "readystatechange",savedConfirmation,false );
       asyncRequest.open( "POST","/saveToFile",true );
       asyncRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-      asyncRequest.send( "filename=" + curPageAddress + "&data=" + tinyMCE.get('content').getContent() ) //specify which file to read from in /templates/
+      asyncRequest.send( "filename=" + curPageName + "&data=" + tinyMCE.get('content').getContent() ) //specify which file to read from in /templates/
 }
    function refreshRows()
    {
@@ -101,7 +96,6 @@
 	   tinymce.get('content').setContent( "" );
 	   document.getElementById( "activePageName" ).innerHTML = "";
            curPageName = "";
-	   curPageAddress = "";
            initRows();
         }
    }
@@ -138,14 +132,31 @@
       asyncRequest.addEventListener( "readystatechange",displayResult,false );
       asyncRequest.open( "POST","/retrieveFile",true );
       asyncRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-      asyncRequest.send( "filename=" + element.id ) //specify which file to read from in /templates/
-      curPageAddress = element.id;
-      curPageName = curPageAddress.substring( 7 );
-      curPageName = curPageName.substring( 0,curPageName.length - 5 );
+      asyncRequest.send( "filename=" + element.id ) 
+      curPageName = element.id;
 
       document.getElementById( "activePageName" ).innerHTML = curPageName;
    }
+   
+   function logout()
+   {
+      asyncRequest = new XMLHttpRequest();
 
+      asyncRequest.addEventListener( "readystatechange",logout_redirect,false );
+      asyncRequest.open( "POST","/logout",true );
+      asyncRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      asyncRequest.send()
+   }
+   
+   function logout_redirect()
+   {
+      if( asyncRequest.readyState == 4 && asyncRequest.status == 200 )
+      {
+         window.location = "/login";
+          //document.getElementById( "saveConfirm" ).innerHTML = asyncRequest.responseText;
+      } 
+   }
+   
 </script>
 	<a href="/">go back to homepage</a> </br>
 	<button onclick="ajaxDelete()">Delete</button>
@@ -164,4 +175,7 @@
    Here are some test pages:
    <table id="newPages" style="border:1px solid black"></table> <!-- Generate rows of the table on window load via JS  -->
 </body>
+Session info:
+{{g.user.username}}
+<button onclick="logout()">Logout</button>
 </html>

@@ -1,56 +1,69 @@
-<!DOCTYPE html>
+{% extends "jinja/base_template.html" %}
+{% block content %} 
+	  <!---MAIN BODY OF WEBSITE--->
+  <div class="mainBody">
+    <div class="titles">teaching&latest<div class="inRed">@cs</div>
+    </div>
+    <!--image img-slider start-->
+    <div class="teachingLatestCS">
+      <div class="img-slider">
+        <!--slide images start, PICS MUST BE 800x500px!!-->
+        <div class="slide active">
+          <img src="/../static/Remote teaching.jpg" alt="">
+          <div class="info">
+            <h4>title 1</h4>
+            <p>Lorem ipsum is something something something and so on</p>
+          </div>
+        </div>
+        <div class="slide">
+          <img src="/../static/video-conference.jpg" alt="">
+          <div class="info">
+            <h4>title 2</h4>
+            <p>Lorem ipsum is something something something and so on</p>
+          </div>
+        </div>
+        <!--slide images end-->
+        <!--automatic nav start-->
+        <div class="navigation">
+          <div class="btn active"></div>
+          <div class="btn"></div>
+        </div>
+        <!--automatic nav end-->
+      </div>
+      <!--image img-slider end-->
+      <div class="moreNews">
+        <a href="">View More News</a>
+        <!--Link to News-->
+      </div>
+    </div>
 
-<html>
-	<head>
-		<link rel="shortcut icon" type="image/x-con" href="/static/favicon.ico">
-	</head>
-   <body>
-	   <a href="webpage">link to another page</a> </br>
-	<a href="editPages">link to the future backend :)</a></br>
-	<table style="border: 2px solid black; margin: auto; margin-top: 300px; font-family: Courier;padding: 30px;padding-bottom: 20px; padding-top: 25px; background-color:lightgrey;">
-	      <tr>
-			   <td> username: </td>
-		      <td><input type="text" id="uname" name="uname"></td>
-		   </tr>
-		   <tr>
-			   <td> password: </td>
-			   <td><input type="password" id="pwd" name="pwd"></td>
-		   </tr>
-		   <tr>
-            <td colspan=2><button style="border: 1px solid black; margin-left: 95px; margin-top:10px;" type="button" onclick="checkUnamePwd()">Login</button></td>
-		   </tr>
-	   </table>
-      
-      <table style="margin: auto; margin-top:40px;"><tr><td>
-      <h4 id="content" style="margin: auto;"></h4>
-      </td></tr></table>
-      
-      <script>
-         function checkUnamePwd()
-         {
-            try
-            {
-               asyncRequest = new XMLHttpRequest();
-               
-               asyncRequest.addEventListener( "readystatechange",displayResult,false );
-               asyncRequest.open( "POST","/test",true );
-               asyncRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-               asyncRequest.send( "uname=" + document.getElementById("uname").value + "&pwd=" + document.getElementById("pwd").value ); 
-            }
-            catch( exection ){ alert( "Request failed" ); }
-         }
-         
-         function displayResult()
-         {
-            if( asyncRequest.readyState == 4 && asyncRequest.status == 200 )
-            {
-               document.getElementById( "content" ).innerHTML = asyncRequest.responseText;
-            }  
-            else
-            {
-              // document.getElementById( "content" ).innerHTML = asyncRequest.status; 
-            }
-         }
-      </script>
-   </body>
-</html>
+    <div class="titles">events<div class="inRed">@cs</div>
+    </div>
+    <div class="eventsCS">
+      <div class="events">
+        <img src="https://img.icons8.com/plasticine/100/000000/calendar.png" />
+        <div class="eventInfo">
+          <a href="">Understanding the Nanoscopic Structural Framework of Brain Astrocytes</a>
+          <div class="tags">Colloquium</div>
+          <div class="tags">something</div>
+        </div>
+      </div>
+      <div class="events">
+        <img src="https://img.icons8.com/plasticine/100/000000/calendar.png" />
+        <div class="eventInfo">
+          <a href="">Virtual Collaboration Techniques to Catalyze Open Innovation</a>
+          <div class="tags">Colloquium</div>
+        </div>
+      </div>
+      <div class="events">
+        <img src="https://img.icons8.com/plasticine/100/000000/calendar.png" />
+        <div class="eventInfo">
+          <a href="">McGill IT Services Virtual Fair</a>
+          <div class="tags">Colloquium</div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+{% endblock %}

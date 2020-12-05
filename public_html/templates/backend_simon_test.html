@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <link rel="shortcut icon" type="image/x-con" href="/static/favicon.ico">
+  <script src="https://cdn.tiny.cloud/1/l0peymszeqahan90ynut0hds27003nt2uikaoyeyf8bdz8vr/tinymce/5/tinymce.min.js" referrerpolicy="origin">
+  </script>
+</head>
+<script>
+     tinymce.init({
+     selector:'textarea',
+     formats: {
+        bold : {inline : 'b' },
+        italic : {inline : 'i' },
+        underline : {inline : 'u'},
+    },
+     init_instance_callback : function(editor) { editor.setContent("");}
+   });
+</script>
+<body>
+	<h1> Create a new page object </h1>
+	<form action="/pages" method="POST">
+			<label for="title">Title: </label>
+			<input type="text" id="title" name="title"> <br>
+			
+			<label for="content">Content:</label>
+			<textarea id="content" name="content" rows="50" cols="50"></textarea>
+			
+			<input type="submit" value="Create" style="margin-left:70px">
+	</form>
+</body>
+</html>

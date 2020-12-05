@@ -1,0 +1,36 @@
+ <div id="header" class="header">
+    <img id="logo" src="/../static/logo-header.png">
+    <div id="navbar" class="navbar">
+      <a href="whycs">Prospective</a>
+      <a href="freshmanprogram">Academic</a>
+      <a href="">Research</a>
+      <a href="">People</a>
+      <a href="">News</a>
+      <a href="">Employement</a>
+      <a href="">Donate</a>
+      <a href="">About</a>
+      <form class="search" action>
+        <!---INSERT HERE SQL INJECTION--->
+        <button type="submit" class="search"><i class="fa fa-search"></i></button>
+        <input type="text" placeholder="Search...">
+      </form>
+    </div>
+    <div class="dropdown">
+      <div id="icon" class="icon" onclick="hamburger(this)">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </div>
+      <button class="search-icon"><i class="fa fa-search"></i></button>
+      <div id="myDropDown" class="dropdown-content">
+        <a href="">Prospective</a>
+        <a href="">Academic</a>
+        <a href="">Research</a>
+        <a href="">People</a>
+        <a href="">News</a>
+        <a href="">Employement</a>
+        <a href="">Donate</a>
+        <a href="">About</a>
+      </div>
+    </div>
+  </div>
