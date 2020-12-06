@@ -64,13 +64,19 @@
          {
             if( asyncRequest.readyState == 4 && asyncRequest.status == 200 )
             {
-               window.location = "/editPages";
+               
+               if( asyncRequest.responseText == "invalid_cred" )
+               {
+                    document.getElementById( "content" ).innerHTML = "Wrong username or password";
+               }
+               else
+               {
+                  window.location = "/edit_pages";
+               }
             }  
-            document.getElementById( "content" ).innerHTML = asyncRequest.responseText;
+            
          }
       </script>
-      
-        <h4>{{ error }}</h4>
-      Session info: {{session['user_id']}}
+      Debug Session info: {{session['user_id']}}
    </body>
 </html>

@@ -1,7 +1,7 @@
 #!flask/bin/python
 
-import sys, os, random, json, base64
-from flask import Flask, render_template, request, redirect, Response, session, url_for, g
+import sys, os, random, json, base64, bcrypt
+from flask import Flask, render_template, request, redirect, Response, session, url_for, g, flash
 from pathlib import Path
 from flaskext.mysql import MySQL
 
@@ -14,7 +14,7 @@ app.config['MYSQL_DATABASE_USER'] = 'cs307-group10'
 app.config['MYSQL_DATABASE_PASSWORD'] = 't5yFhbxNT7GPqw49'
 app.config['MYSQL_DATABASE_DB'] = 'cs307-group10-DB'
 app.config['MYSQL_DATABASE_HOST'] = 'localhost'
-app.config['SECRET_KEY'] = '888akjdbahs??dhadadawiydbyywyyy@@SZSAD'
+app.config['SECRET_KEY'] = '80s8akjdbahs??dHop8ad28iydb?BwYXy@@SZSAD'
  
 mysql.init_app(app)
 
@@ -24,65 +24,60 @@ mysql.init_app(app)
 def index():
     return render_template('index.html')
     
-#@app.route('/futurebackend')
-#def fbe():
-#    return render_template('editPages.html')
-class User:
-    def __init__(self,id,username,password):
-        self.id = id
-        self.username = username
-        self.password = password
-        
-    def __repr__(self):
-        return f'<User: {self.username}>'
-        
-users = []
-users.append(User(id=1,username='admin',password='toor'))
-print(users)
-    
 @app.before_request
 def before_request():
     g.user = None
 
     if 'user_id' in session:
-        user = [ x for x in users if x.id == session['user_id']][0]
-        g.user = user
+        conn = mysql.connect()
+        cursor = conn.cursor()
+        
+        #update g.user with current session info
+        uid = session['user_id']
+        query = "SELECT uname FROM login_info WHERE id=" + str(uid) + ";"
+        cursor.execute(query)    
+        response =  cursor.fetchall()
+        g.user = response[0][0]
+
     
 @app.route('/login', methods=['GET', 'POST'])
 def login_page():
-    e = ""
     if request.method == 'POST':
-        session.pop( 'user_id',None )
+        session.pop( 'user_id',None ) #make sure there are no 2 sessions active for the same user
         
         username = request.form['uname']
         password = request.form['pwd']
         
         
-        user = [ x for x in users if x.username == username ]
-        print("XXXXXXXX=" + str(user) )
+        conn = mysql.connect()
+        cursor = conn.cursor()
         
-        if user == []:
-            user = None
-        else:
-            user = user[ 0 ]
+        query = "SELECT * FROM login_info WHERE uname= '{}';".format(username)   
+        
+        cursor.execute(query)
+
+        response = cursor.fetchall()
+        
+        if response: #username exist in the database
+            if bcrypt.checkpw( password.encode('utf8'),response[0][ 2 ].encode('utf8') ): #correct password
+                session['user_id'] = response[0][0] #update session with the user
+                return redirect(url_for('edit_pages'))
+            else: #wrong password for existing username
+                return "invalid_cred"
             
-        if user and user.password == password:
-            session['user_id'] = user.id
-            return redirect(url_for('backend'))
         else:
-            e = 'Invalid Credentials. Please try again.'
-            return e
-            #return redirect(url_for('login_page',error=e) )
-            
-    return render_template('login.html', error=e )
+            return "invalid_cred"
+                   
+    return render_template('login.html')
     
+'''    
 @app.route('/editPages')
 def backend():
-    #if 'admin' not in session:
     if not g.user:
         return redirect(url_for('login_page'))
 
     return render_template('backend.html')   
+'''
   
 @app.route('/logout', methods=['POST'])
 def logout():
