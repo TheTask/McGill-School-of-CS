@@ -90,26 +90,11 @@ def logout():
         session.pop( 'user_id',None )
         g.user = None
         return redirect(url_for('login_page'))
+        
+        
 
-#Simon's tests with jinja templates
-@app.route('/child')
-def child_content():
-    conn = mysql.connect()
-    cursor =conn.cursor()
 
-    query = "SELECT * FROM pages;"
-    cursor.execute(query)
-    posts= cursor.fetchall()
-    thislist= []
-    i=0
-    for page in posts:       #this decodes the html formatted content section. 
-        thislist.insert(i,[])
-        thislist[i].extend(page)
-        thislist[i][2] = thislist[i][2].encode('ascii')
-        thislist[i][2]= base64.b64decode(thislist[i][2])
-        thislist[i][2]= thislist[i][2].decode('ascii')
-        i+=1
-    return render_template('jinja/child_content.html', posts=thislist)
+
 
 #simon's test for a function which takes as input a title and content and creates a row in the pages table. 
 @app.route('/pages', methods=['POST'])
@@ -144,93 +129,38 @@ def initRows():
     conn = mysql.connect()
     cursor =conn.cursor()
 
-    query = "SELECT title FROM pages_html;"
+    TABLE = request.form.get('TABLE')
+    
+    query = "SELECT * FROM {};".format(TABLE)                                  
     cursor.execute(query)
 
     ans = ""
     for row in cursor.fetchall():
-        ans += "<tr><td><a id=" + str(row[0])+ " href = # onclick=loadMCIcontent(this)>" + str(row[0]) + "</a></td></tr>"
+        ans += "<tr><td><a id=" + str(row[0])+ " href = # onclick=loadContent(this)>" + str(row[1]) + "</a></td></tr>"
 
-    #print(ans)
     return ans
-
-@app.route('/addRow',methods = ['POST'])
-def addRow():
-    conn = mysql.connect()
-    cursor = conn.cursor()
-
-    title = str( request.form.get( 'row',default="newPage"))
-    content = "<p>Type your text here</p>"
-
-    content_bytes = content.encode('ascii')
-    base64_bytes = base64.b64encode(content_bytes)
-    base64_message = base64_bytes.decode('ascii')
-    
-    query = "INSERT INTO pages_html (title, content) VALUES ('{}', '{}');".format(title,base64_message)
-    cursor.execute(query)
-    conn.commit()
-    
-    return ""
-
 
 @app.route('/deleteRow',methods = ['POST'])
 def deleteRow():
     conn = mysql.connect()
     cursor = conn.cursor()
 
-    title = str( request.form.get( 'row',default=""))
-
-    query = "DELETE FROM pages_html WHERE title = '{}';".format(title)
-    #print(query)
+    ID = str( request.form.get( 'id',default=""))
+    TABLE = request.form.get( 'TABLE',default = "")
+    
+    query = "DELETE FROM {} WHERE id = '{}';".format(TABLE,ID)
     cursor.execute(query)
     conn.commit()
 
     return ""
-
-@app.route('/retrieveFile',methods = ['POST'])  #call this from frontend to retrieve the contents of file, see testmci.html for example
-def retrieveFile(): 
-    title = request.form.get( 'filename' )                           
-    conn = mysql.connect()
-    cursor = conn.cursor()
-
-    query = "SELECT content FROM pages_html WHERE title = '{}';".format(title)
-    cursor.execute(query)
-    data = cursor.fetchall()
-    
-    ans = ""
-    
-    for row in data:
-      for first in row:
-         ans += first
-    
-    content_bytes = ans.encode('ascii')
-    decoded = base64.b64decode(content_bytes)
-    full_decode = decoded.decode('ascii')
-    
-    return full_decode
     
 
-@app.route('/saveToFile',methods = ['POST'])
-def saveToFile(): #take filename and content as json args
-    conn = mysql.connect()
-    cursor = conn.cursor()
-    
-    title = request.form.get( 'filename' )
-    content = data = request.form.get( 'data' )
-    
-    content_bytes = content.encode('ascii')
-    base64_bytes = base64.b64encode(content_bytes)
-    base64_message = base64_bytes.decode('ascii')
-    
-    query = "UPDATE pages_html SET Content = '{}' WHERE title = '{}';".format(base64_message,title)
-    cursor.execute(query)
-    conn.commit()
 
-    return "Saved!"  #maybe use error codes?
-    
-    
-    
 
+    
+    
+    
+# no bueno below
 def retrieveBackend():                        
     filename =  "templates/backend_to_read.html" 
     #print( "FILENAME=" + filename )
@@ -266,6 +196,114 @@ def test():
         return retrieveBackend()
     else:
         return "INVALID USERNAME OR PASSWORD"
+        
+#to here 
+        
+
+
+#------These are the function associated with all the edit_TABLES pages urls   -----
+
+#--------edit_pages--------------------------------------------------------------
+
+@app.route('/edit_pages')
+def edit_pages():
+    #if 'admin' not in session:
+    if not g.user:
+        return redirect(url_for('login_page'))
+
+    return render_template('jinja/edit_pages.html')   
+
+@app.route('/saveOrAdd_pages',methods = ['POST'])
+def saveOrAdd_pages(): 
+    conn = mysql.connect()
+    cursor = conn.cursor()
+    
+    ID = request.form.get( 'id' )
+    content = request.form.get( 'content' )
+    print(content)
+    title = request.form.get ('title')
+    saveOrAdd = request.form.get('saveOrAdd') #this will decide whether we do an add or update operation
+    
+    content_bytes = content.encode('ascii')
+    base64_bytes = base64.b64encode(content_bytes)
+    base64_message = base64_bytes.decode('ascii')
+    
+    if saveOrAdd == 'add':
+        query = "INSERT INTO pages (title, content) VALUES ('{}', '{}');".format(title,base64_message)
+        cursor.execute(query)
+        conn.commit()
+        return ""  
+    elif saveOrAdd == "save":
+        query = "UPDATE pages SET title = '{}', content = '{}' WHERE id = '{}';".format(title,base64_message,ID)    #this will need to be changed to the proper values. Mater of fact the query here will be changed quite often to accomodate different post type. 
+        cursor.execute(query)
+        conn.commit()
+        return "Saved!"  #maybe use error codes?
+    
+@app.route('/retrieveFile_pages',methods = ['POST'])  #call this from frontend to retrieve the contents of file, see testmci.html for example
+def retrieveFile_pages(): 
+    ID = request.form.get( 'ID' )                           
+    conn = mysql.connect()
+    cursor = conn.cursor()
+    if ID == '':
+        return ""
+    query = "SELECT * FROM pages WHERE id = '{}';".format(ID)           #both content and title here needs to be changed to the proper values. Mater of fact the query here will be changed quite often to accomodate different post type. 
+    cursor.execute(query)
+    data = cursor.fetchall()
+    title = data[0][1]
+    content= data[0][2]
+    
+ 
+    content_bytes = content.encode('ascii')
+    decoded = base64.b64decode(content_bytes)
+    content_decoded = decoded.decode('ascii')
+    # I have to return i string that's formatted for title and content
+    ans = "&!title="+title+"&!content="+content_decoded 
+    return ans
+#---------------------------------------------------
+        
+#------These are the pages urls for all the pages from the pages table  -----
+
+
+@app.route('/whycs') #/[name of the page]
+def whycs():         # this also needs to be changed
+    conn = mysql.connect()
+    cursor =conn.cursor()
+
+    query = "SELECT * FROM pages WHERE id=13;" #id needs to be the id of the page
+    cursor.execute(query)
+    posts= cursor.fetchall()
+    thislist= []
+    i=0
+    for page in posts:      
+        thislist.insert(i,[])
+        thislist[i].extend(page)
+        thislist[i][2] = thislist[i][2].encode('ascii')
+        thislist[i][2]= base64.b64decode(thislist[i][2])
+        thislist[i][2]= thislist[i][2].decode('ascii')
+        i+=1
+    return render_template('jinja/pages.html', posts=thislist)
+    
+@app.route('/freshmanprogram') #/[name of the page]
+def freshmanprogram():         # this also needs to be changed
+    conn = mysql.connect()
+    cursor =conn.cursor()
+
+    query = "SELECT * FROM pages WHERE id=12;" #id needs to be the id of the page
+    cursor.execute(query)
+    posts= cursor.fetchall()
+    thislist= []
+    i=0
+    for page in posts:      
+        thislist.insert(i,[])
+        thislist[i].extend(page)
+        thislist[i][2] = thislist[i][2].encode('ascii')
+        thislist[i][2]= base64.b64decode(thislist[i][2])
+        thislist[i][2]= thislist[i][2].decode('ascii')
+        i+=1
+    return render_template('jinja/pages.html', posts=thislist)
+
+#End of the pages  !!!!!!!!!!!!----------------------------------------    
 
 if __name__ == '__main__':
     app.run(host="fall2020-comp307.cs.mcgill.ca",port="8010",threaded=True,debug=True)
+

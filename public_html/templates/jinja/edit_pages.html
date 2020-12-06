@@ -1,0 +1,67 @@
+{% extends "jinja/template_backend.html" %}
+
+{% block page_name %}edit_pages{% endblock %}
+{% block TABLE %}pages{% endblock %}  {#// I need this to define from which table to do the sql queries and which functions to call in app.py #}
+
+{#
+	// functions to build in app.py for every post type:
+	retrieveFile_TABLE
+	saveOrAdd_TABLE
+#}
+
+{# the following functions need to be adapted to every post type. #}
+{% block displayResult %}   {# this function takes the output of retrieveFile_TABLE and needs to update every field of the post. #}
+   function displayResult(){
+      if( asyncRequest.readyState == 4 && asyncRequest.status == 200 ){
+		var response = asyncRequest.responseText;
+		var posTitle = response.search("&!title=");
+		var posContent= response.search("&!content=");
+		var title = response.slice(posTitle+8,posContent);
+		var content= response.slice(posContent+10,);
+		console.log(content);
+        tinymce.get('content').setContent(content);
+		document.getElementById("postTitle").value = title;
+		 
+		 
+      }  
+   }
+{% endblock %}
+
+{% block ajaxAdd %} {# this function needs to take all the info from the fields and create a long string with all the variables for the asyncRequest including saveOrAdd=add #}
+
+	function ajaxAdd(){
+      var postTitle = document.getElementById("postTitle").value;
+      if( postTitle != "" ){
+      	 asyncRequest = new XMLHttpRequest();
+        
+      	 asyncRequest.addEventListener( "readystatechange",refreshRows,false );
+      	 asyncRequest.open( "POST","/saveOrAdd_pages",true );
+      	 asyncRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      	 asyncRequest.send( "title=" + postTitle + "&saveOrAdd=add"+ "&id=" + ID +"&content=" + tinyMCE.get('content').getContent());
+	 
+		}
+   } 
+{% endblock %}  
+
+{% block ajaxSave %} {# this function needs to take all the info from the fields and create a long string with all the variables for the asyncRequest including saveOrAdd=save The ajax string can be a copy paste from ajaxAdd but with saveOrAdd = save # and the ID also passed#}
+	function ajaxSave() {
+		var postTitle = document.getElementById("postTitle").value;
+		if( ID != "" ){
+			asyncRequest = new XMLHttpRequest();
+                  
+			asyncRequest.addEventListener( "readystatechange",savedConfirmation,false );
+			asyncRequest.open( "POST","/saveOrAdd_pages",true );
+			asyncRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			console.log(tinyMCE.get('content').getContent());
+			asyncRequest.send( "saveOrAdd=save" + "&id=" + ID + "&title=" + postTitle + "&content=" + tinyMCE.get('content').getContent() ) //specify which file to read from in /templates/
+		}
+	}
+{% endblock %}  
+
+{% block fields %} <!-- this is the function that will have to be heavily modified based on the post. -->
+
+   Post title: <input type="text" id="postTitle"></input>
+   <form method="post" action="somepage">
+    <textarea id="content" style="width:100%"></textarea>
+   </form>
+{% endblock %} 

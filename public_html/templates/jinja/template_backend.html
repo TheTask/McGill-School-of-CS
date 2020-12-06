@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdn.tiny.cloud/1/l0peymszeqahan90ynut0hds27003nt2uikaoyeyf8bdz8vr/tinymce/5/tinymce.min.js" referrerpolicy="origin">
+  </script>
+  <meta charset="utf-8">
+	  <title>McGill School of Computer Science</title>
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <link rel="shortcut icon" type="image/x-con" href="/../static/favicon1.ico">
+	  <link rel="stylesheet" type="text/css" href="/../static/myStyleSheet.css">
+	  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<script>
+		function hamburger(x) {
+		  x.classList.toggle("change");
+		  document.getElementById("myDropDown").classList.toggle("show");
+		}
+	</script>
+</head>
+<!-- This is the script tag for the backend fonctionality JS -->
+<script>
+	var ID = "";
+	var TABLE = "{% block TABLE %}{% endblock %}";                                                                       //Var table will have to be defined in the children templates.
+	
+     tinymce.init({
+     selector:'textarea',
+     formats: {
+        bold : {inline : 'b' },
+        italic : {inline : 'i' },
+        underline : {inline : 'u'},
+    },
+     init_instance_callback : function(editor) { editor.setContent("");}
+	});
+   
+
+   window.onload = initRows(); 																			
+	
+   function initRows(){
+      asyncRequest = new XMLHttpRequest();    
+      asyncRequest.addEventListener( "readystatechange",replaceInnerHTMLbackend,false );
+      asyncRequest.open( "POST","/initRows",true );                                                
+      asyncRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      asyncRequest.send("TABLE="+TABLE);
+	}
+   
+   function replaceInnerHTMLbackend( ){
+      if( asyncRequest.readyState == 4 && asyncRequest.status == 200 )
+      {
+         document.getElementById( "newPosts" ).innerHTML =  asyncRequest.responseText;
+	 document.getElementById( "postTitle" ).value = "";
+	 ajaxLoad();
+      }  
+	}
+   
+   function loadContent( element ){
+      asyncRequest = new XMLHttpRequest();
+	  ID = element.id;
+      asyncRequest.addEventListener( "readystatechange",displayResult,false );
+      asyncRequest.open( "POST","/retrieveFile_"+TABLE,true );                                                //this function will have to be defined in app.py
+      asyncRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      asyncRequest.send( "ID=" + element.id ) 
+	}
+   
+    function ajaxDelete(){
+		console.log("ID="+ID);
+      if( ID != "" )
+      {   
+	 asyncRequest = new XMLHttpRequest();
+        
+         asyncRequest.addEventListener( "readystatechange",refreshRowsDel,false );
+         asyncRequest.open( "POST","/deleteRow",true );												 
+         asyncRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+         asyncRequest.send( "id=" + ID +"&TABLE="+TABLE );
+      }
+	}  
+   
+   function refreshRowsDel() {
+        if( asyncRequest.readyState == 4 && asyncRequest.status == 200 )
+        {
+	   tinymce.get('content').setContent( "" );
+           ID = "";
+           initRows();
+        }
+	}
+	function refreshRows(){
+		if( asyncRequest.readyState == 4 && asyncRequest.status == 200 ){
+			initRows();
+		}
+	}
+   
+   function ajaxLoad() {
+
+      asyncRequest = new XMLHttpRequest();
+                  
+      asyncRequest.addEventListener( "readystatechange",displayResult,false );
+      asyncRequest.open( "POST","/retrieveFile_"+TABLE,true );								 
+      asyncRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      asyncRequest.send( "ID=" + ID ) 
+	}
+	function savedConfirmation(){
+      if( asyncRequest.readyState == 4 && asyncRequest.status == 200 ){
+          document.getElementById( "saveConfirm" ).innerHTML = asyncRequest.responseText;
+      }  
+	}
+	function logout(){
+      asyncRequest = new XMLHttpRequest();
+
+      asyncRequest.addEventListener( "readystatechange",logout_redirect,false );
+      asyncRequest.open( "POST","/logout",true );
+      asyncRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      asyncRequest.send()
+   }
+   
+   function logout_redirect(){
+      if( asyncRequest.readyState == 4 && asyncRequest.status == 200 )
+      {
+         window.location = "/login";
+          //document.getElementById( "saveConfirm" ).innerHTML = asyncRequest.responseText;
+      } 
+   }
+{% block ajaxAdd %} <!-- this is the function that will have to be heavily modified based on the post. -->
+{% endblock %}  
+  
+{% block ajaxSave %} <!-- this is the function that will have to be heavily modified based on the post. -->
+{% endblock %}  
+  
+{% block displayResult %} <!-- this is the function that will have to be heavily modified based on the post. -->
+{% endblock %}
+
+</script>
+<body>
+	{% include "jinja/header_backend.html" %}
+	<br><br>
+	<a href="/">go back to homepage</a> </br>
+	<button onclick="ajaxDelete()">Delete</button>
+	<button onclick="ajaxSave()">Save</button>
+	<button onclick="ajaxAdd()">Add</button>
+
+   <p id="saveConfirm"></p>
+	{% block fields %} <!-- this block will be replaced by all the html which describes the fields of the post type.  -->
+	{% endblock %} 
+
+
+   List of all posts in {% block page_name %}{% endblock %}:
+   <table id="newPosts" style="border:1px solid black"></table> <!-- Generate rows of the table on window load via JS  -->
+   <br><br>
+    {% include "jinja/footer.html" %}
+</body>
+
+
+<!-- this needs to be on all pages for the backend -->
+Session info:
+{{g.user.username}}
+<button onclick="logout()">Logout</button>
+</html>
