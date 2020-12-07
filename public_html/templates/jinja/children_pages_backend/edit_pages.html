@@ -18,7 +18,6 @@
 		var posContent= response.search("&!content=");
 		var title = response.slice(posTitle+8,posContent);
 		var content= response.slice(posContent+10,);
-		console.log(content);
         tinymce.get('content').setContent(content);
 		document.getElementById("postTitle").value = title;
 		 
@@ -33,11 +32,11 @@
       var postTitle = document.getElementById("postTitle").value;
       if( postTitle != "" ){
       	 asyncRequest = new XMLHttpRequest();
-        
       	 asyncRequest.addEventListener( "readystatechange",refreshRows,false );
       	 asyncRequest.open( "POST","/saveOrAdd_pages",true );
       	 asyncRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-      	 asyncRequest.send( "title=" + postTitle + "&saveOrAdd=add"+ "&id=" + ID +"&content=" + tinyMCE.get('content').getContent());
+		 var content = encodeURIComponent(tinyMCE.get('content').getContent());
+      	 asyncRequest.send( "title=" + postTitle + "&saveOrAdd=add"+ "&id=" + ID +"&content=" + content);
 	 
 		}
    } 
@@ -52,8 +51,8 @@
 			asyncRequest.addEventListener( "readystatechange",savedConfirmation,false );
 			asyncRequest.open( "POST","/saveOrAdd_pages",true );
 			asyncRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-			console.log(tinyMCE.get('content').getContent());
-			asyncRequest.send( "saveOrAdd=save" + "&id=" + ID + "&title=" + postTitle + "&content=" + tinyMCE.get('content').getContent() ) //specify which file to read from in /templates/
+			var content = encodeURIComponent(tinyMCE.get('content').getContent());
+			asyncRequest.send( "saveOrAdd=save" + "&id=" + ID + "&title=" + postTitle + "&content=" + content ); //specify which file to read from in /templates/
 		}
 	}
 {% endblock %}  

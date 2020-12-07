@@ -1,16 +1,25 @@
+
 <!DOCTYPE html>
 
 
 <html>
 	<head>
 		<link rel="shortcut icon" type="image/x-con" href="/static/favicon1.ico">
-      <script src="https://cdn.tiny.cloud/1/l0peymszeqahan90ynut0hds27003nt2uikaoyeyf8bdz8vr/tinymce/5/tinymce.min.js" referrerpolicy="origin">
-  </script>
+      <script src="https://cdn.tiny.cloud/1/l0peymszeqahan90ynut0hds27003nt2uikaoyeyf8bdz8vr/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+	  <meta charset="utf-8">
+	  <title>McGill School of Computer Science</title>
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <link rel="shortcut icon" type="image/x-con" href="/../static/favicon1.ico">
+	  <link rel="stylesheet" type="text/css" href="/../static/myStyleSheet.css">
+	  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<script>
+		function hamburger(x) {
+		  x.classList.toggle("change");
+		  document.getElementById("myDropDown").classList.toggle("show");
+		}
+	</script>
 	</head>
-   
-   <body>
-      <script>
-
+	<script>
      tinymce.init({
      selector:'textarea',
      formats: {
@@ -19,34 +28,7 @@
         underline : {inline : 'u'},
       }
        });
-      </script>
-      
-   	<table style="border: 2px solid black; margin: auto; margin-top: 300px; font-family: Courier;padding: 30px;padding-bottom: 20px; padding-top: 25px; background-color:lightgrey;">
-   	      <tr>
-   			   <td> username: </td>
-   		      <td><input type="text" id="uname" name="uname"></td>
-   		   </tr>
-   		   <tr>
-   			   <td> password: </td>
-   			   <td><input type="password" id="pwd" name="pwd"></td>
-   		   </tr>
-   		   <tr>
-               <td colspan=2><button style="border: 1px solid black; margin-left: 95px; margin-top:10px;" type="button" onclick="checkUnamePwd()">Login</button></td>
-   		   </tr>
-   	   </table>
-         
-         
-         <table style="margin: auto; margin-top:40px;">
-            <tr>
-               <td>
-                  <h4 id="content" style="margin: auto;"></h4>
-               </td>
-            </tr>
-         </table>
-
- 
-      <script>
-         function checkUnamePwd()
+	function checkUnamePwd()
          {
             try
             {
@@ -76,7 +58,35 @@
             }  
             
          }
-      </script>
+	</script>
+   <body>
+	{% include "jinja/header.html" %}
+      
+   	<table style="border: 2px solid black; margin: auto; margin-top: 300px; margin-bottom: 300px;font-family: Courier;padding: 30px;padding-bottom: 20px; padding-top: 25px; background-color:lightgrey;">
+   	      <tr>
+   			   <td> username: </td>
+   		      <td><input type="text" id="uname" name="uname"></td>
+   		   </tr>
+   		   <tr>
+   			   <td> password: </td>
+   			   <td><input type="password" id="pwd" name="pwd"></td>
+   		   </tr>
+   		   <tr>
+               <td colspan=2><button style="border: 1px solid black; margin-left: 95px; margin-top:10px;" type="button" onclick="checkUnamePwd()">Login</button></td>
+   		   </tr>
+   	   </table>
+         
+         
+         <table style="margin: auto; margin-top:40px;">
+            <tr>
+               <td>
+                  <h4 id="content" style="margin: auto;"></h4>
+               </td>
+            </tr>
+         </table>
+
+	{% include "jinja/footer.html" %}
+
       Debug Session info: {{session['user_id']}}
    </body>
 </html>

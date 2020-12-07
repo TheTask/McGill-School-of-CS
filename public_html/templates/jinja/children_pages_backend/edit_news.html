@@ -1,0 +1,104 @@
+{% extends "jinja/template_backend.html" %}
+
+{% block page_name %}edit_news{% endblock %}
+{% block TABLE %}news{% endblock %}  {#// I need this to define from which table to do the sql queries and which functions to call in app.py #}
+
+{#
+	// functions to build in app.py for every post type:
+	retrieveFile_TABLE
+	saveOrAdd_TABLE
+#}
+
+{# the following functions need to be adapted to every post type. #}
+{% block displayResult %}   {# this function takes the output of retrieveFile_TABLE and needs to update every field of the post. #}
+   function displayResult(){
+      if( asyncRequest.readyState == 4 && asyncRequest.status == 200 ){       //"&!title="+title+ "&!date="+date+ "&!picture="+picture+ "&!is_announcement="+is_announcement+ "&!is_award="+is_award+ "&!content="+content_decoded 
+		var response = asyncRequest.responseText;
+		
+		var posTitle = response.search("&!title=");
+		var posDate = response.search("&!date=");
+		var posPicture = response.search("&!picture=");
+		var posIs_announcement = response.search("&!is_announcement=");
+		var posIs_award = response.search("&!is_award=");
+		var posContent= response.search("&!content=");
+		
+		
+		var title = response.slice(posTitle+8,posDate);
+		var date = response.slice(posDate+7,posPicture);
+		var picture = response.slice(posPicture+10,posIs_announcement);
+		var is_announcement = response.slice(posIs_announcement+18,posIs_award);
+		var is_award = response.slice(posIs_award+11,posContent);
+		var content= response.slice(posContent+10,);
+		
+        tinymce.get('content').setContent(content);
+		document.getElementById("postTitle").value = title;
+		document.getElementById("date").value = date;
+		document.getElementById("is_announcement").value = is_announcement;
+		document.getElementById("is_award").value = is_award;
+		document.getElementById("picture").value = picture;
+		 
+		 
+      }  
+   }
+{% endblock %}
+
+{% block ajaxAdd %} {# this function needs to take all the info from the fields and create a long string with all the variables for the asyncRequest including saveOrAdd=add #}
+
+	function ajaxAdd(){
+      var postTitle = document.getElementById("postTitle").value;
+      if( postTitle != "" ){
+      	 asyncRequest = new XMLHttpRequest();
+      	 asyncRequest.addEventListener( "readystatechange",refreshRows,false );
+      	 asyncRequest.open( "POST","/saveOrAdd_news",true );
+      	 asyncRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+		 var content = encodeURIComponent(tinyMCE.get('content').getContent());
+		 var date,picture,is_announcement,is_award;
+		 date = document.getElementById("date").value;
+		 is_announcement = document.getElementById("is_announcement").value;
+		 is_award = document.getElementById("is_award").value;
+		 picture = document.getElementById("picture").value;
+      	 asyncRequest.send( "title=" + postTitle + "&saveOrAdd=add"+ "&date="+date +"&is_announcement="+is_announcement+ "&is_award="+ is_award +"&picture="+picture+ "&id=" + ID +"&content=" + content);
+	 
+		}
+   } 
+{% endblock %}  
+
+{% block ajaxSave %} {# this function needs to take all the info from the fields and create a long string with all the variables for the asyncRequest including saveOrAdd=save The ajax string can be a copy paste from ajaxAdd but with saveOrAdd = save # and the ID also passed#}
+	function ajaxSave() {
+		var postTitle = document.getElementById("postTitle").value;
+		if( ID != "" ){
+			asyncRequest = new XMLHttpRequest();
+                  
+			asyncRequest.addEventListener( "readystatechange",savedConfirmation,false );
+			asyncRequest.open( "POST","/saveOrAdd_news",true );
+			asyncRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			var content = encodeURIComponent(tinyMCE.get('content').getContent());
+			var date,picture,is_announcement,is_award;
+			date = document.getElementById("date").value;
+			is_announcement = document.getElementById("is_announcement").value;
+			is_award = document.getElementById("is_award").value;
+			picture = document.getElementById("picture").value;
+			asyncRequest.send( "saveOrAdd=save" + "&id=" + ID + "&title=" + postTitle +"&date="+date +"&is_announcement="+is_announcement+ "&is_award="+ is_award +"&picture="+picture+ "&content=" + content ); 
+		}
+	}
+{% endblock %}  
+
+{% block fields %} <!-- this is the function that will have to be heavily modified based on the post. -->
+
+   Post title: <input type="text" id="postTitle"></input>
+   <form method="post" action="somepage">
+		<textarea id="content" style="width:100%"></textarea>
+		<br>
+		<label for="date">Date:</label>
+		<input type="date" id="date" name="date" required>
+		<br>
+		<label for="picture">Address where the picture is store (/static/pictures/[nameOfPicture].jpeg/png):</label>
+		<input type="text" id="picture" name="picture">
+		<br>
+		<label for="is_announcement">is_announcement</label>
+		<input type="checkbox" id="is_announcement" name="is_announcement">
+		<br>
+		<label for="is_award">is_award</label>
+		<input type="checkbox" id="is_award" name="is_award">
+   </form>
+{% endblock %} 

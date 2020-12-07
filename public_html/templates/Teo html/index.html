@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>McGill School of Computer Science</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" type="image/x-con" href="favicon1.ico">
+  <link rel="stylesheet" type="text/css" href="myStyleSheet.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script>
+    function hamburger(x) {
+      x.classList.toggle("change");
+      document.getElementById("myDropDown").classList.toggle("show");
+    }
+  </script>
+</head>
+
+<body>
+  <!---HEADER OF THE WEBSITE --->
+  <div id="header" class="header">
+    <img id="logo" src="logo-header.png">
+    <div id="navbar" class="navbar">
+      <a href="">Prospective</a>
+      <a href="">Academic</a>
+      <a href="">Research</a>
+      <a href="">People</a>
+      <a href="">News</a>
+      <a href="">Employement</a>
+      <a href="">Donate</a>
+      <a href="">About</a>
+      <form class="search" action>
+        <!---INSERT HERE SQL INJECTION--->
+        <button type="submit" class="search"><i class="fa fa-search"></i></button>
+        <input type="text" placeholder="Search...">
+      </form>
+    </div>
+    <div class="dropdown">
+      <div id="icon" class="icon" onclick="hamburger(this)">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </div>
+      <button class="search-icon"><i class="fa fa-search"></i></button>
+      <div id="myDropDown" class="dropdown-content">
+        <a href="">Prospective</a>
+        <a href="">Academic</a>
+        <a href="">Research</a>
+        <a href="">People</a>
+        <a href="">News</a>
+        <a href="">Employement</a>
+        <a href="">Donate</a>
+        <a href="">About</a>
+      </div>
+    </div>
+  </div>
+
+
+  <!---SIDE NAVIGATION BAR--->
+  <div class="sideNav">
+
+  </div>
+
+  <!---MAIN BODY OF WEBSITE--->
+  <div class="mainBody">
+    <div class="titles">teaching&latest<div class="inRed">@cs</div>
+    </div>
+    <!--image img-slider start-->
+    <div class="teachingLatestCS">
+      <div class="img-slider">
+        <!--slide images start, PICS MUST BE 800x500px!!-->
+        <div class="slide active">
+          <img src="Remote teaching.jpg" alt="">
+          <div class="info">
+            <h4>title 1</h4>
+            <p>Lorem ipsum is something something something and so on</p>
+          </div>
+        </div>
+        <div class="slide">
+          <img src="video-conference.jpg" alt="">
+          <div class="info">
+            <h4>title 2</h4>
+            <p>Lorem ipsum is something something something and so on</p>
+          </div>
+        </div>
+        <!--slide images end-->
+        <!--automatic nav start-->
+        <div class="navigation">
+          <div class="btn active"></div>
+          <div class="btn"></div>
+        </div>
+        <!--automatic nav end-->
+      </div>
+      <!--image img-slider end-->
+      <div class="moreNews">
+        <a href="">View More News</a>
+        <!--Link to News-->
+      </div>
+    </div>
+
+    <div class="titles">events<div class="inRed">@cs</div>
+    </div>
+    <div class="eventsCS">
+      <div class="events">
+        <img src="https://img.icons8.com/plasticine/100/000000/calendar.png" />
+        <div class="eventInfo">
+          <a href="">Understanding the Nanoscopic Structural Framework of Brain Astrocytes</a>
+          <div class="tags">Colloquium</div>
+          <div class="tags">something</div>
+        </div>
+      </div>
+      <div class="events">
+        <img src="https://img.icons8.com/plasticine/100/000000/calendar.png" />
+        <div class="eventInfo">
+          <a href="">Virtual Collaboration Techniques to Catalyze Open Innovation</a>
+          <div class="tags">Colloquium</div>
+        </div>
+      </div>
+      <div class="events">
+        <img src="https://img.icons8.com/plasticine/100/000000/calendar.png" />
+        <div class="eventInfo">
+          <a href="">McGill IT Services Virtual Fair</a>
+          <div class="tags">Colloquium</div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+  <script type="text/javascript">
+    var slides = document.querySelectorAll('.slide');
+    var btns = document.querySelectorAll('.btn');
+    let currentSlide = 1;
+
+    // Javascript for image slider manual navigation
+    var manualNav = function(manual) {
+      slides.forEach((slide) => {
+        slide.classList.remove('active');
+
+        btns.forEach((btn) => {
+          btn.classList.remove('active');
+        });
+      });
+
+      slides[manual].classList.add('active');
+      btns[manual].classList.add('active');
+    }
+
+    btns.forEach((btn, i) => {
+      btn.addEventListener("click", () => {
+        manualNav(i);
+        currentSlide = i;
+      });
+    });
+
+    // Javascript for image slider autoplay navigation
+    var repeat = function(activeClass) {
+      let active = document.getElementsByClassName('active');
+      let i = 1;
+
+      var repeater = () => {
+        setTimeout(function() {
+          [...active].forEach((activeSlide) => {
+            activeSlide.classList.remove('active');
+          });
+
+          slides[i].classList.add('active');
+          btns[i].classList.add('active');
+          i++;
+
+          if (slides.length == i) {
+            i = 0;
+          }
+          if (i >= slides.length) {
+            return;
+          }
+          repeater();
+        }, 10000);
+      }
+      repeater();
+    }
+    repeat();
+  </script>
+
+  <!---FOOTER OF THE WEBSITE--->
+  <div class="footer">
+    <a href="https://linktr.ee/mcgillcsus?fbclid=IwAR0nwBC0oEQLKJF5TmAOIQSVm1z8Ev55mJsLrQ-3G_DHviu6vi_o0HAROsE" target="_blank">
+      <img src="https://img.icons8.com/color/48/000000/linktree.png" />
+      <a href="https://www.facebook.com/myCSUS" target="_blank">
+        <img src="https://img.icons8.com/fluent-systems-regular/48/000000/facebook-new.png" />
+      </a>
+      <a href="https://www.instagram.com/mcgillcsus/" target="_blank">
+        <img src="https://img.icons8.com/fluent-systems-regular/48/000000/instagram-new.png" />
+      </a>
+      <a href="mailto:csus@cs.mcgill.ca" target="_blank">
+        <img src="https://img.icons8.com/material-rounded/48/000000/email.png" />
+      </a>
+<p>© McGill University 2020</p>
+  </div>
+</body>
+
+</html>

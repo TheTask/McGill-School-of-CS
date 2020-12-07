@@ -91,33 +91,6 @@ def logout():
 
 
 
-#simon's test for a function which takes as input a title and content and creates a row in the pages table. 
-@app.route('/pages', methods=['POST'])
-def pages():
-    conn = mysql.connect()
-    cursor =conn.cursor()
-
-    title = request.form.get('title')
-    content= request.form.get('content')
-    #here I have a string which contains single and double quotes
-    #they cannot put entered in the sql query therefore I encode them into bytes and back into the ascii
-    #representation of those bytes. That way the information can be stored in the db. 
-    content_bytes = content.encode('ascii')
-    base64_bytes = base64.b64encode(content_bytes)
-    base64_message = base64_bytes.decode('ascii')
-    #encoding steps done. 
-    query = "INSERT INTO pages (title, content) VALUES ('{}', '{}');".format(title,base64_message)
-    cursor.execute(query)
-    conn.commit()
-    
-    return ""
-
-@app.route('/create_page')
-def create_page():
-    return render_template('backend_simon_test.html')
-
-
-
 
 @app.route('/initRows',methods = ['POST'])
 def initRows():
@@ -154,49 +127,11 @@ def deleteRow():
 
     
     
-    
-# no bueno below
-def retrieveBackend():                        
-    filename =  "templates/backend_to_read.html" 
-    #print( "FILENAME=" + filename )
-    if( os.path.exists( filename )):
-        return Path( filename ).read_text()
-    else:
-        return ""
-
-@app.route('/test', methods = ['POST'])
-def test():
-    default = ""
-    uname = request.form.get( 'uname',default )
-    pw = request.form.get( 'pwd',default )
-
-    conn = mysql.connect()
-    cursor = conn.cursor()
-    
-    query = "SELECT * FROM login WHERE uname=\"" + uname +"\";"
-    cursor.execute(query)
-    login_reply = cursor.fetchall()
-    
-    if not login_reply:
-        return "INVALID USERNAME OR PASSWORD"
-    
-    if( login_reply[ 0 ][ 1 ] == pw ):
-        #ans = "LOGIN SUCCESSFUL! HERE IS THE DATA:</br></br>"
-
-        #cursor.execute("SELECT * from test")
-    
-        #for row in cursor.fetchall():
-        #    ans += str(row)
-        
-        return retrieveBackend()
-    else:
-        return "INVALID USERNAME OR PASSWORD"
-        
-#to here 
+ 
         
 
 
-#------These are the function associated with all the edit_TABLES pages urls   -----
+#------These are the function associated with all the edit_TABLES pages urls   ---------------------------------------------------------------------------------
 
 #--------edit_pages--------------------------------------------------------------
 
@@ -206,16 +141,14 @@ def edit_pages():
     if not g.user:
         return redirect(url_for('login_page'))
 
-    return render_template('jinja/edit_pages.html')   
+    return render_template('jinja/children_pages_backend/edit_pages.html')   
 
 @app.route('/saveOrAdd_pages',methods = ['POST'])
 def saveOrAdd_pages(): 
     conn = mysql.connect()
     cursor = conn.cursor()
-    
     ID = request.form.get( 'id' )
     content = request.form.get( 'content' )
-    print(content)
     title = request.form.get ('title')
     saveOrAdd = request.form.get('saveOrAdd') #this will decide whether we do an add or update operation
     
@@ -255,8 +188,81 @@ def retrieveFile_pages():
     ans = "&!title="+title+"&!content="+content_decoded 
     return ans
 #---------------------------------------------------
+#--------edit_news_cs---------------------------------
+
+@app.route('/edit_news_cs')
+def edit_news_cs():
+    #if 'admin' not in session:
+    if not g.user:
+        return redirect(url_for('login_page'))
+
+    return render_template('jinja/children_pages_backend/edit_news_cs.html')   
+
+@app.route('/saveOrAdd_news_cs',methods = ['POST'])
+def saveOrAdd_news_cs(): 
+    conn = mysql.connect()
+    cursor = conn.cursor()
+    ID = request.form.get( 'id' )
+    content = request.form.get( 'content' )
+    title = request.form.get ('title')
+    saveOrAdd = request.form.get('saveOrAdd') #this will decide whether we do an add or update operation
+    date = request.form.get('date')
+    is_announcement = request.form.get('is_announcement')
+    is_award = request.form.get('is_award')
+    picture = request.form.get('picture')
+    
+    content_bytes = content.encode('ascii')
+    base64_bytes = base64.b64encode(content_bytes)
+    base64_message = base64_bytes.decode('ascii')
+    
+    if saveOrAdd == 'add':
+        query = "INSERT INTO news_cs (title, content, date, picture, is_announcement, is_award) VALUES ('{}', '{}','{}', '{}','{}', '{}');".format(title,base64_message,date,picture,is_announcement,is_award)
+        cursor.execute(query)
+        conn.commit()
+        return ""  
+    elif saveOrAdd == "save":
+        query = "UPDATE news_cs SET title = '{}', content = '{}', date = '{}', picture = '{}', is_announcement = '{}', is_award = '{}' WHERE id = '{}';".format(title,base64_message,date,picture,is_announcement,is_award, ID)    #this will need to be changed to the proper values. Mater of fact the query here will be changed quite often to accomodate different post type. 
+        cursor.execute(query)
+        conn.commit()
+        return "Saved!"  #maybe use error codes?
+    
+@app.route('/retrieveFile_news_cs',methods = ['POST'])  #call this from frontend to retrieve the contents of file, see testmci.html for example
+def retrieveFile_news_cs(): 
+    ID = request.form.get( 'ID' )                           
+    conn = mysql.connect()
+    cursor = conn.cursor()
+    if ID == '':
+        return ""
+    query = "SELECT * FROM news_cs WHERE id = '{}';".format(ID)           #both content and title here needs to be changed to the proper values. Mater of fact the query here will be changed quite often to accomodate different post type. 
+    cursor.execute(query)
+    data = cursor.fetchall()
+    title = data[0][1]
+    content= data[0][2]
+    date= data[0][3]
+    picture= data[0][4]
+    is_announcement= data[0][5]
+    is_award = data[0][6]
+    
+    content_bytes = content.encode('ascii')
+    decoded = base64.b64decode(content_bytes)
+    content_decoded = decoded.decode('ascii')
+    # I have to return i string that's formatted for title and content
+    ans = "&!title="+title+ "&!date="+date+ "&!picture="+picture+ "&!is_announcement="+is_announcement+ "&!is_award="+is_award+ "&!content="+content_decoded 
+    return ans
+#---------------------------------------------------    
+#-----------------END of the edit_TABLES ----------------------------------------------------------------------------#       
         
-#------These are the pages urls for all the pages from the pages table  -----
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+#------These are the pages urls for all the pages for the front end -----
 
 
 @app.route('/whycs') #/[name of the page]
@@ -264,7 +270,7 @@ def whycs():         # this also needs to be changed
     conn = mysql.connect()
     cursor =conn.cursor()
 
-    query = "SELECT * FROM pages WHERE id=13;" #id needs to be the id of the page
+    query = "SELECT * FROM pages WHERE id=83;" #id needs to be the id of the page
     cursor.execute(query)
     posts= cursor.fetchall()
     thislist= []
@@ -276,14 +282,14 @@ def whycs():         # this also needs to be changed
         thislist[i][2]= base64.b64decode(thislist[i][2])
         thislist[i][2]= thislist[i][2].decode('ascii')
         i+=1
-    return render_template('jinja/pages.html', posts=thislist)
+    return render_template('jinja/children_pages_frontend/pages.html', posts=thislist)
     
 @app.route('/freshmanprogram') #/[name of the page]
 def freshmanprogram():         # this also needs to be changed
     conn = mysql.connect()
     cursor =conn.cursor()
 
-    query = "SELECT * FROM pages WHERE id=12;" #id needs to be the id of the page
+    query = "SELECT * FROM pages WHERE id=84;" #id needs to be the id of the page
     cursor.execute(query)
     posts= cursor.fetchall()
     thislist= []
@@ -295,7 +301,27 @@ def freshmanprogram():         # this also needs to be changed
         thislist[i][2]= base64.b64decode(thislist[i][2])
         thislist[i][2]= thislist[i][2].decode('ascii')
         i+=1
-    return render_template('jinja/pages.html', posts=thislist)
+    return render_template('jinja/children_pages_frontend/pages.html', posts=thislist)
+    
+    
+@app.route('/news_cs') #/[name of the page]
+def new_cs():         # this also needs to be changed
+    conn = mysql.connect()
+    cursor =conn.cursor()
+
+    query = "SELECT * FROM news_cs;" 
+    cursor.execute(query)
+    posts= cursor.fetchall()
+    thislist= []
+    i=0
+    for page in posts:      
+        thislist.insert(i,[])
+        thislist[i].extend(page)
+        thislist[i][2] = thislist[i][2].encode('ascii')
+        thislist[i][2]= base64.b64decode(thislist[i][2])
+        thislist[i][2]= thislist[i][2].decode('ascii')
+        i+=1
+    return render_template('jinja/children_pages_frontend/news_cs.html', posts=thislist)
 
 #End of the pages  !!!!!!!!!!!!----------------------------------------    
 

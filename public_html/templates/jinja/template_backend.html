@@ -99,6 +99,7 @@
 	function savedConfirmation(){
       if( asyncRequest.readyState == 4 && asyncRequest.status == 200 ){
           document.getElementById( "saveConfirm" ).innerHTML = asyncRequest.responseText;
+		  initRows();
       }  
 	}
 	function logout(){
@@ -149,6 +150,6 @@
 
 <!-- this needs to be on all pages for the backend -->
 Session info:
-{{g.user.username}}
+{{g.user}}
 <button onclick="logout()">Logout</button>
 </html>

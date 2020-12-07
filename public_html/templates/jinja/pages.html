@@ -1,9 +1,0 @@
-{% extends "jinja/base_template.html" %}
-{% block content %} 
-	{% for row in posts %}
-		<div>
-			<h1>{{ row[1] }} </h1>
-			<p>{{ row[2]|safe }} </p>
-		</div>
-	{% endfor %}
-{% endblock %}
