@@ -59,34 +59,59 @@
             
          }
 	</script>
+<style>
+
+.button {
+  background-color: #ED1B2F;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+	.button:hover {
+  text-decoration: underline;
+  
+  	tr.spaceUnder>td {
+  padding-bottom: 8px;
+}
+}
+</style>
    <body>
 	{% include "jinja/header.html" %}
       
-   	<table style="border: 2px solid black; margin: auto; margin-top: 300px; margin-bottom: 300px;font-family: Courier;padding: 30px;padding-bottom: 20px; padding-top: 25px; background-color:lightgrey;">
-   	      <tr>
-   			   <td> username: </td>
-   		      <td><input type="text" id="uname" name="uname"></td>
+      <div style="margin: auto; padding-bottom:120px;display: table; margin: 0 auto;">
+   	<table style="border: 2px solid white;margin-top: 160px; border-radius: 10px; margin-bottom: 50px;font-family: Calibri, Candara, sans-serif; padding: 30px;padding-bottom: 20px; padding-top: 25px;background-color:white;">
+   	      <tr class="spaceUnder">
+   			   <td style="font-weight: bold;"> Username: </td>
+   		      <td><input type="text" style="padding-left:15px; margin-left:15px;"  id="uname" name="uname"></td>
+   		   </tr>
+   		   <tr style="margin-top:10px; padding-top:10px;">
+   			   <td style="font-weight: bold;"> Password: </td>
+   			   <td><input type="password" style="padding-left:15px; margin-left:15px;" id="pwd" name="pwd"></td>
    		   </tr>
    		   <tr>
-   			   <td> password: </td>
-   			   <td><input type="password" id="pwd" name="pwd"></td>
-   		   </tr>
-   		   <tr>
-               <td colspan=2><button style="border: 1px solid black; margin-left: 95px; margin-top:10px;" type="button" onclick="checkUnamePwd()">Login</button></td>
+               <td colspan=2><button class="button" style=" margin-left: 75px; margin-top:20px;" type="button" onclick="checkUnamePwd()">Login</button></td>
    		   </tr>
    	   </table>
          
          
-         <table style="margin: auto; margin-top:40px;">
+         <table style="margin-top:20px;margin-left:52px;">
             <tr>
                <td>
-                  <h4 id="content" style="margin: auto;"></h4>
+                  <h4 id="content" style="position:absolute;font-family: Calibri, Candara, sans-serif;"></h4>
                </td>
             </tr>
          </table>
-
+      </div>
 	{% include "jinja/footer.html" %}
 
-      Debug Session info: {{session['user_id']}}
+	<!--Debug Session info: {{session['user_id']}}-->
    </body>
 </html>

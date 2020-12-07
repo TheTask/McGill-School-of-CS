@@ -70,14 +70,91 @@ def login_page():
                    
     return render_template('login.html')
     
-'''    
-@app.route('/editPages')
-def backend():
-    if not g.user:
-        return redirect(url_for('login_page'))
 
-    return render_template('backend.html')   
-'''
+@app.route('/tab')
+def tab():
+    return render_template('tab.html')   
+    
+    
+    
+    
+@app.route('/addAdmin',methods = ['POST'])  
+def addAdmin():
+
+    username = request.form['uname']
+    password = request.form['pwd']
+        
+    conn = mysql.connect()
+    cursor = conn.cursor()
+        
+    query = "SELECT * from login_info WHERE uname = '{}';".format(username)
+        
+    cursor.execute(query)
+    
+    response = cursor.fetchall()
+    
+    if response:
+        return "adminDup"
+        
+    else:
+        salt = bcrypt.gensalt()
+        hashed = bcrypt.hashpw(password.encode('utf8'), salt)
+    
+        query = "INSERT INTO login_info (uname, password) VALUES ('{}', '{}');".format(username,hashed.decode('utf-8'))
+        #print(query)
+        cursor.execute(query)
+        
+        conn.commit()
+
+        return ""
+    
+  
+@app.route('/pollAdmins',methods = ['POST'])    
+def pollAdmins():
+    conn = mysql.connect()
+    cursor = conn.cursor()
+        
+    query = "SELECT uname from login_info;"
+        
+    cursor.execute(query)
+    
+    ans = ""
+    for row in cursor.fetchall():
+        ans += "<li>" + str(row[0]) + "</li>"
+
+    return ans
+    
+@app.route('/removeAdmin',methods = ['POST'])    
+def removeAdmin():
+    
+
+    username = request.form['uname']
+        
+    conn = mysql.connect()
+    cursor = conn.cursor()
+        
+    query = "SELECT * from login_info WHERE uname = '{}';".format(username)
+        
+    cursor.execute(query)
+    
+    response = cursor.fetchall()
+    
+    if not response:
+        return "adminDoesntExist"
+        
+    else:
+        if g.user and response[ 0 ][ 0 ] == session['user_id']:
+            return "adminLoggedIn"
+    
+    
+        query = "DELETE FROM login_info WHERE uname = '{}';".format(username)
+        #print(query)
+        cursor.execute(query)
+    
+        conn.commit()
+
+        return ""
+    
   
 @app.route('/logout', methods=['POST'])
 def logout():

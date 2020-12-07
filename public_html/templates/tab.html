@@ -1,0 +1,258 @@
+
+<!DOCTYPE html>
+
+
+<html>
+	<head>
+		<link rel="shortcut icon" type="image/x-con" href="/static/favicon1.ico">
+      <script src="https://cdn.tiny.cloud/1/l0peymszeqahan90ynut0hds27003nt2uikaoyeyf8bdz8vr/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+	  <meta charset="utf-8">
+	  <title>McGill School of Computer Science</title>
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <link rel="shortcut icon" type="image/x-con" href="/../static/favicon1.ico">
+	  <link rel="stylesheet" type="text/css" href="/../static/myStyleSheet.css">
+	  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<script>
+		function hamburger(x) {
+		  x.classList.toggle("change");
+		  document.getElementById("myDropDown").classList.toggle("show");
+		}
+	</script>
+	</head>
+	<script>
+   window.onload = pollAdmins;
+   
+   function clearFields()
+   {
+      document.getElementById( "admin_uname" ).value = "";
+      document.getElementById( "admin_pwd" ).value = "";
+      document.getElementById( "admin_repwd" ).value = "";
+      document.getElementById( "adminToRemove" ).value = "";
+      
+      
+   }
+   
+   function clearErrMessages()
+   {
+      document.getElementById( "addAdminErr" ).innerHTML = "";
+      document.getElementById( "delAdminErr" ).innerHTML = "";
+   }
+
+	function addNewAdmin()
+         {
+            setTimeout(function() { clearErrMessages(); }, 5000);
+            
+            var adminName = document.getElementById( "admin_uname" ).value;
+            var adminPw = document.getElementById( "admin_pwd" ).value;
+            var adminRePw = document.getElementById( "admin_repwd" ).value;
+            
+            if( adminPw != adminRePw )
+            {
+               document.getElementById( "addAdminErr" ).innerHTML = "Passwords don't match!";
+               
+               clearFields();
+            }
+            else if( adminPw.length <= 4 )
+            {
+               document.getElementById( "addAdminErr" ).innerHTML = "Passwords needs to be at least 5 characters long!";
+               
+               clearFields();
+            }
+            else if( adminName.length <= 4 )
+            {
+               document.getElementById( "addAdminErr" ).innerHTML = "Name needs to be at least 5 characters long!";
+               
+               clearFields();
+            }
+            else if( adminName == adminPw )
+            {
+               document.getElementById( "addAdminErr" ).innerHTML = "Password has to be different from username!";
+               
+               clearFields();
+            }
+            else
+            {
+               try
+               {
+                  asyncRequest = new XMLHttpRequest();
+                  
+                  asyncRequest.addEventListener( "readystatechange",onAdd,false );
+                  asyncRequest.open( "POST","/addAdmin",true );
+                  asyncRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                  asyncRequest.send( "uname=" + adminName + "&pwd=" + adminPw ); 
+               }
+               catch( exection ){ alert( "Request failed" ); }
+            }
+         }
+         
+         function onAdd()
+         {
+            if( asyncRequest.readyState == 4 && asyncRequest.status == 200 )
+            {
+               
+               if( asyncRequest.responseText == "adminDup" )
+               {
+                    document.getElementById( "addAdminErr" ).innerHTML = "Admin with this name already exists in the database!";
+               }
+               else
+               {
+                  document.getElementById( "addAdminErr" ).innerHTML = "Admin Added Successfully!";
+               }
+               pollAdmins();
+               clearFields();
+            }  
+            
+         }
+         
+         function pollAdmins()
+         {
+            try
+            {
+               asyncRequest = new XMLHttpRequest();
+               
+               asyncRequest.addEventListener( "readystatechange",displayAdmins,false );
+               asyncRequest.open( "POST","/pollAdmins",true );
+               asyncRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+               asyncRequest.send(); 
+            }
+            catch( exection ){ alert( "Request failed" ); }
+         }
+         
+         function displayAdmins()
+         {
+            if( asyncRequest.readyState == 4 && asyncRequest.status == 200 )
+            {
+               document.getElementById( "admins" ).innerHTML = asyncRequest.responseText;
+            }
+         }
+         
+         
+         function removeAdmin()
+         {
+            if( document.getElementById( "adminToRemove" ).value != "" )
+            { 
+               setTimeout(function() { clearErrMessages(); }, 5000);
+               
+               try
+               {
+                  asyncRequest = new XMLHttpRequest();
+                  
+                  asyncRequest.addEventListener( "readystatechange",onRemove,false );
+                  asyncRequest.open( "POST","/removeAdmin",true );
+                  asyncRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                  asyncRequest.send( "uname=" + document.getElementById("adminToRemove").value ); 
+               }
+               catch( exection ){ alert( "Request failed" ); }
+            }
+         }
+         
+         function onRemove()
+         {
+            if( asyncRequest.readyState == 4 && asyncRequest.status == 200 )
+            {
+               
+               if( asyncRequest.responseText == "adminDoesntExist" )
+               {
+                    document.getElementById( "delAdminErr" ).innerHTML = "Admin with this name doesn't exists in the database!";
+               }
+               else if( asyncRequest.responseText == "adminLoggedIn" )
+               {
+                    document.getElementById( "delAdminErr" ).innerHTML = "Cannot delete the admin who is currently logged in!";
+               }
+               else
+               {
+                  document.getElementById( "delAdminErr" ).innerHTML = "Admin Deleted Successfully!";
+               }
+               pollAdmins();
+               clearFields();
+            }  
+             
+            
+         }
+	</script>
+   
+   <style>
+   nav ul{
+      height:200px; 
+      width:50%; 
+      overflow:hidden; 
+      overflow-y:scroll;
+      margin-top: 35px;
+      margin-left: 20px;
+      }
+   
+   ul li{
+      font-size: 20px;
+      font-family: Calibri, Candara, sans-serif;
+      }
+      
+   .button {
+  background-color: #ED1B2F;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+	.button:hover {
+  text-decoration: underline;
+   
+
+   
+   </style>
+   
+   <body>
+	{% include "jinja/header.html" %}
+      <div style="margin-left:50px; margin-top:50px; width: 500px;">
+         <h2 style="font-family: Calibri, Candara, sans-serif;">CREATED ADMINS</h2>
+         
+         <nav>
+            <ul id="admins">
+            </ul>
+        </nav>
+      </div>
+       
+      <div style=" margin-top:50px;">
+         <h2 style="font-family: Calibri, Candara, sans-serif;">ADD NEW ADMIN</h2>
+      	<table >
+      	      <tr >
+      			   <td> Username: </td>
+      		      <td><input type="text"  id="admin_uname" name="uname"></td>
+      		   </tr>
+      		   <tr>
+      			   <td> Password: </td>
+      			   <td><input type="password" id="admin_pwd" name="pwd"></td>
+      		   </tr>
+               <tr >
+      			   <td > Repeat Password: </td>
+      			   <td><input type="password" id="admin_repwd" name="pwd"></td>
+      		   </tr>
+      		   <tr>
+                  <td colspan=2><button type="button" class="button" onclick="addNewAdmin()">Add</button></td>
+      		   </tr>
+      	</table>
+         <p style="margin-top:5px; position: absolute;" id="addAdminErr"><p>  
+      
+
+         <h2 style="padding-top:50px; font-family: Calibri, Candara, sans-serif;">REMOVE ADMIN</h2>   
+         
+         Name: <input type="text"  id="adminToRemove" name="uname"> 
+         <button  class="button" type="button" onclick="removeAdmin()">Remove</button>   
+         <p style="margin-top:5px; position: absolute;"id="delAdminErr"><p>
+       
+       </div>
+
+   <div > 
+      
+      <p style="margin-top:30px;">Session info:{{g.user}}</p>
+            
+   	{% include "jinja/footer.html" %}
+   </div>
+   </body>
+</html>
