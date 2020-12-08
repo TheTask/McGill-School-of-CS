@@ -1,69 +1,146 @@
 {% extends "jinja/base_template.html" %}
 {% block content %} 
 	  <!---MAIN BODY OF WEBSITE--->
-  <div class="mainBody">
-    <div class="titles">teaching&latest<div class="inRed">@cs</div>
-    </div>
-    <!--image img-slider start-->
-    <div class="teachingLatestCS">
-      <div class="img-slider">
-        <!--slide images start, PICS MUST BE 800x500px!!-->
-        <div class="slide active">
-          <img src="/../static/Remote teaching.jpg" alt="">
-          <div class="info">
-            <h4>title 1</h4>
-            <p>Lorem ipsum is something something something and so on</p>
+  <div class="mainBody container">
+    <div class="row">
+      <div class="sideNav col">
+      </div>
+      <!--image img-slider start-->
+      <div class="col">
+        <div class="titles">teaching&latest<div class="inRed">@cs</div>
+        </div>
+        <div class="teachingLatestCS">
+          <div class="img-slider">
+            <!--slide images start, PICS MUST BE 800x500px!!-->
+            <div class="slide active">
+              <img src="Remote teaching.jpg" alt="">
+              <div class="info">
+                <h4>title 1</h4>
+                <p>Lorem ipsum is something something something and so on</p>
+              </div>
+            </div>
+            <div class="slide">
+              <img src="video-conference.jpg" alt="">
+              <div class="info">
+                <h4>title 2</h4>
+                <p>Lorem ipsum is something something something and so on</p>
+              </div>
+            </div>
+            <!--slide images end-->
+            <!--automatic nav start-->
+            <div class="navigation">
+              <div class="btnC active"></div>
+              <div class="btnC"></div>
+            </div>
+            <!--automatic nav end-->
+          </div>
+          <!--image img-slider end-->
+          <div class="moreNews">
+            <a href="">View More News</a>
           </div>
         </div>
-        <div class="slide">
-          <img src="/../static/video-conference.jpg" alt="">
-          <div class="info">
-            <h4>title 2</h4>
-            <p>Lorem ipsum is something something something and so on</p>
+        <div class="titles">events<div class="inRed">@cs</div>
+        </div>
+        <div class="eventsCS">
+          <div class="events row">
+            <div class="col-2">
+              <img src="https://img.icons8.com/plasticine/100/000000/calendar.png" />
+            </div>
+            <div class="col">
+              <div class="row">
+                <a href="">Understanding the Nanoscopic Structural Framework of Brain Astrocytes</a>
+              </div>
+              <div class="row">
+                <div class="tags">Colloquium</div>
+                <div class="tags">something</div>
+              </div>
+            </div>
+          </div>
+          <div class="events row">
+            <div class="col-2">
+              <img src="https://img.icons8.com/plasticine/100/000000/calendar.png" />
+            </div>
+            <div class="col">
+              <div class="row">
+                <a href="">Virtual Collaboration Techniques to Catalyze Open Innovation</a>
+              </div>
+              <div class="row">
+                <div class="tags">Colloquium</div>
+              </div>
+            </div>
+          </div>
+          <div class="events row">
+            <div class="col-2">
+              <img src="https://img.icons8.com/plasticine/100/000000/calendar.png" />
+            </div>
+            <div class="col">
+              <div class="row">
+                <a href="">McGill IT Services Virtual Fair</a>
+              </div>
+              <div class="row">
+                <div class="tags">Colloquium</div>
+              </div>
+            </div>
           </div>
         </div>
-        <!--slide images end-->
-        <!--automatic nav start-->
-        <div class="navigation">
-          <div class="btn active"></div>
-          <div class="btn"></div>
-        </div>
-        <!--automatic nav end-->
       </div>
-      <!--image img-slider end-->
-      <div class="moreNews">
-        <a href="">View More News</a>
-        <!--Link to News-->
+      <div class="col">
+
       </div>
     </div>
-
-    <div class="titles">events<div class="inRed">@cs</div>
-    </div>
-    <div class="eventsCS">
-      <div class="events">
-        <img src="https://img.icons8.com/plasticine/100/000000/calendar.png" />
-        <div class="eventInfo">
-          <a href="">Understanding the Nanoscopic Structural Framework of Brain Astrocytes</a>
-          <div class="tags">Colloquium</div>
-          <div class="tags">something</div>
-        </div>
-      </div>
-      <div class="events">
-        <img src="https://img.icons8.com/plasticine/100/000000/calendar.png" />
-        <div class="eventInfo">
-          <a href="">Virtual Collaboration Techniques to Catalyze Open Innovation</a>
-          <div class="tags">Colloquium</div>
-        </div>
-      </div>
-      <div class="events">
-        <img src="https://img.icons8.com/plasticine/100/000000/calendar.png" />
-        <div class="eventInfo">
-          <a href="">McGill IT Services Virtual Fair</a>
-          <div class="tags">Colloquium</div>
-        </div>
-      </div>
-    </div>
-
-
   </div>
+  <script type="text/javascript">
+    var slides = document.querySelectorAll('.slide');
+    var btns = document.querySelectorAll('.btnC');
+    let currentSlide = 1;
+
+    // Javascript for image slider manual navigation
+    var manualNav = function(manual) {
+      slides.forEach((slide) => {
+        slide.classList.remove('active');
+
+        btns.forEach((btn) => {
+          btn.classList.remove('active');
+        });
+      });
+
+      slides[manual].classList.add('active');
+      btns[manual].classList.add('active');
+    }
+
+    btns.forEach((btn, i) => {
+      btn.addEventListener("click", () => {
+        manualNav(i);
+        currentSlide = i;
+      });
+    });
+
+    // Javascript for image slider autoplay navigation
+    var repeat = function(activeClass) {
+      let active = document.getElementsByClassName('active');
+      let i = 1;
+
+      var repeater = () => {
+        setTimeout(function() {
+          [...active].forEach((activeSlide) => {
+            activeSlide.classList.remove('active');
+          });
+
+          slides[i].classList.add('active');
+          btns[i].classList.add('active');
+          i++;
+
+          if (slides.length == i) {
+            i = 0;
+          }
+          if (i >= slides.length) {
+            return;
+          }
+          repeater();
+        }, 10000);
+      }
+      repeater();
+    }
+    repeat();
+  </script>
 {% endblock %}

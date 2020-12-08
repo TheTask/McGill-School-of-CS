@@ -1,36 +1,117 @@
- <div id="header" class="header">
-    <img id="logo" src="/../static/logo-header.png">
-    <div id="navbar" class="navbar">
-      <a href="whycs">Prospective</a>
-      <a href="freshmanprogram">Academic</a>
-      <a href="">Research</a>
-      <a href="">People</a>
-      <a href="news_cs">News</a>
-      <a href="">Employement</a>
-      <a href="">Donate</a>
-      <a href="login">login</a>
-      <form class="search" action>
-        <!---INSERT HERE SQL INJECTION--->
-        <button type="submit" class="search"><i class="fa fa-search"></i></button>
-        <input type="text" placeholder="Search...">
-      </form>
-    </div>
-    <div class="dropdown">
-      <div id="icon" class="icon" onclick="hamburger(this)">
+ <div id="header" class="header container-fluid">
+    <nav class="navbar navbar-expand-md">
+      <a class="navbar-brand" href="#">
+        <img id="logo" src="/../static/logo-header.png">
+      </a>
+      <div id="icon" class="icon" onclick="hamburger(this)" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
         <div class="bar1"></div>
         <div class="bar2"></div>
         <div class="bar3"></div>
       </div>
-      <button class="search-icon"><i class="fa fa-search"></i></button>
-      <div id="myDropDown" class="dropdown-content">
-        <a href="">Prospective</a>
-        <a href="">Academic</a>
-        <a href="">Research</a>
-        <a href="">People</a>
-        <a href="">News</a>
-        <a href="">Employement</a>
-        <a href="">Donate</a>
-        <a href="">About</a>
+      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav mx-lg-auto">
+          <div class="dropdown">
+            <button type="button" class="btn btn-light" data-toggle="dropdown">
+              Prospective
+            </button>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <a class="dropdown-item" href="#">General Info</a>
+              <a class="dropdown-item" href="#">Why CS?</a>
+              <a class="dropdown-item" href="#">CEGEP</a>
+              <a class="dropdown-item" href="#">Freshman</a>
+              <a class="dropdown-item" href="#">Choosing a Major</a>
+              <a class="dropdown-item" href="#">Transfer</a>
+              <a class="dropdown-item" href="#">Internship</a>
+              <div class="dropdown-divider" href="#"></div>
+              <div class="dropdown-header" href="#">Admission</div>
+              <a class="dropdown-item" href="#">Undergraduate</a>
+              <a class="dropdown-item" href="#">Graduate</a>
+            </div>
+          </div>
+          <div class="dropdown">
+            <button type="button" class="btn btn-light" data-toggle="dropdown">
+              Academic
+            </button>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="#">Undergraduate</a>
+              <a class="dropdown-item" href="#">Graduate</a>
+              <a class="dropdown-item" href="#">Courses</a>
+              <a class="dropdown-item" href="#">Teaching Assistant</a>
+              <a class="dropdown-item" href="#">Funding</a>
+            </div>
+          </div>
+          <div class="dropdown">
+            <button type="button" class="btn btn-light" data-toggle="dropdown">
+              Research
+            </button>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="#">Areas</a>
+              <a class="dropdown-item" href="#">Tech Reports</a>
+            </div>
+          </div>
+          <div class="dropdown">
+            <button type="button" class="btn btn-light" data-toggle="dropdown">
+              People
+            </button>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="#">Faculty</a>
+              <a class="dropdown-item" href="#">Staff</a>
+              <a class="dropdown-item" href="#">Community</a>
+            </div>
+          </div>
+          <div class="dropdown">
+            <button type="button" class="btn btn-light" data-toggle="dropdown">
+              News
+            </button>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="#">News</a>
+              <a class="dropdown-item" href="#">Events</a>
+            </div>
+          </div>
+          <div class="dropdown">
+            <button type="button" class="btn btn-light" data-toggle="dropdown">
+              Employment
+            </button>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="#">Faculty</a>
+              <a class="dropdown-item" href="#">Course Lecturer</a>
+              <a class="dropdown-item" href="#">Priority Points</a>
+              <div class="dropdown-divider" href="#"></div>
+              <a class="dropdown-item" href="#">Research</a>
+              <a class="dropdown-item" href="#">Student</a>
+            </div>
+          </div>
+          <div id="donate">
+            <a href="" style="text-decoration:none;">Donate</a>
+          </div>
+          <div class="dropdown">
+            <button type="button" class="btn btn-light" data-toggle="dropdown">
+              About
+            </button>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="#">Contacts</a>
+              <a class="dropdown-item" href="#">Facilities</a>
+              <div class="dropdown-divider" href="#"></div>
+              <div class="dropdown-header" href="#">Quick Links</div>
+              <a class="dropdown-item" href="#">Visitor Form</a>
+              <a class="dropdown-item" href="#">Room Reservation</a>
+              <a class="dropdown-item" href="#">Webmail</a>
+              <div class="dropdown-divider" href="#"></div>
+              <div class="dropdown-header" href="#">Add Content</div>
+              <a class="dropdown-item" href="#">Internal</a>
+              <div class="dropdown-divider" href="#"></div>
+              <div class="dropdown-header" href="#">Docs</div>
+              <a class="dropdown-item" href="#">Tech Support</a>
+              <a class="dropdown-item" href="#">Admin Info</a>
+            </div>
+          </div>
+        </ul>
+        <form class="form-inline">
+          <input class="form-control-sm mr-sm-0" type="search" placeholder="Search" aria-label="Search" style="max">
+          <button class="btn" type="submit" style="padding: 0"><span id="search" class="material-icons">
+              search
+            </span></button>
+        </form>
       </div>
-    </div>
+    </nav>
   </div>
