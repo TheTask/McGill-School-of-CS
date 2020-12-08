@@ -1,9 +1,44 @@
 {% extends "jinja/base_template.html" %}
-{% block content %} 
+{% block content %}
+<div class="mainBody news container">
+    <div class="row">
+      <div class="col"> 
 	{% for row in posts %}
-		<div>
-			<h1>{{ row[1] }} </h1>
-			<p>{{ row[2]|safe }} </p>
+
+		<style>		
+			.card1 {
+				padding: 10px;
+				padding-left: 15px;
+				padding-right: 15px;
+				border-radius: 10px;
+				border-radius: 5px;
+				background: white;
+				line-height: 1.5;
+			}
+			ul {
+				padding-left: 25px;
+			}
+			.titleSmall {
+  				background: rgb(237,27,47);
+				background: -moz-linear-gradient(90deg, rgba(237,27,47,1) 0%, rgba(238,175,181,1) 23%, rgba(242,227,228,1) 45%, rgba(252,247,248,1) 74%, rgba(255,255,255,1) 100%);
+				background: -webkit-linear-gradient(90deg, rgba(237,27,47,1) 0%, rgba(238,175,181,1) 23%, rgba(242,227,228,1) 45%, rgba(252,247,248,1) 74%, rgba(255,255,255,1) 100%);
+				background: linear-gradient(90deg, rgba(237,27,47,1) 0%, rgba(238,175,181,1) 23%, rgba(242,227,228,1) 45%, rgba(252,247,248,1) 74%, rgba(255,255,255,1) 100%);
+				filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ed1b2f",endColorstr="#ffffff",GradientType=1);  				color: white;
+  				font-weight: 500;
+  				padding: 7px;
+  				border-radius: 5px;
+  				border-right: none;
+  				letter-spacing: 2px;
+			}
+		</style>
+
+		<div class="card1">
+			<h1 class="titleSmall">{{ row[1] }} </h1>
+			{{ row[2]|safe }} 
 		</div>
 	{% endfor %}
+	</div>
+   </div>
+</div>
+
 {% endblock %}

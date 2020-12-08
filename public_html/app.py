@@ -378,7 +378,7 @@ def whycs():         # this also needs to be changed
     conn = mysql.connect()
     cursor =conn.cursor()
 
-    query = "SELECT * FROM pages WHERE id=83;" #id needs to be the id of the page
+    query = "SELECT * FROM pages WHERE id=95;" #id needs to be the id of the page
     cursor.execute(query)
     posts= cursor.fetchall()
     thislist= []
@@ -392,12 +392,12 @@ def whycs():         # this also needs to be changed
         i+=1
     return render_template('jinja/children_pages_frontend/pages.html', posts=thislist)
     
-@app.route('/freshmanprogram') #/[name of the page]
-def freshmanprogram():         # this also needs to be changed
+@app.route('/freshman') #/[name of the page]
+def freshman():         # this also needs to be changed
     conn = mysql.connect()
     cursor =conn.cursor()
 
-    query = "SELECT * FROM pages WHERE id=84;" #id needs to be the id of the page
+    query = "SELECT * FROM pages WHERE id=97;" #id needs to be the id of the page
     cursor.execute(query)
     posts= cursor.fetchall()
     thislist= []
@@ -411,7 +411,154 @@ def freshmanprogram():         # this also needs to be changed
         i+=1
     return render_template('jinja/children_pages_frontend/pages.html', posts=thislist)
     
+@app.route('/mcGill_school_of_computer_science') #/[name of the page]
+def mcGill_school_of_computer_science():         # this also needs to be changed
+    conn = mysql.connect()
+    cursor =conn.cursor()
+
+    query = "SELECT * FROM pages WHERE id=94;" #id needs to be the id of the page
+    cursor.execute(query)
+    posts= cursor.fetchall()
+    thislist= []
+    i=0
+    for page in posts:      
+        thislist.insert(i,[])
+        thislist[i].extend(page)
+        thislist[i][2] = thislist[i][2].encode('ascii')
+        thislist[i][2]= base64.b64decode(thislist[i][2])
+        thislist[i][2]= thislist[i][2].decode('ascii')
+        i+=1
+    return render_template('jinja/children_pages_frontend/pages.html', posts=thislist)
     
+@app.route('/cegep') #/[name of the page]
+def cegep():         # this also needs to be changed
+    conn = mysql.connect()
+    cursor =conn.cursor()
+
+    query = "SELECT * FROM pages WHERE id=96;" #id needs to be the id of the page
+    cursor.execute(query)
+    posts= cursor.fetchall()
+    thislist= []
+    i=0
+    for page in posts:      
+        thislist.insert(i,[])
+        thislist[i].extend(page)
+        thislist[i][2] = thislist[i][2].encode('ascii')
+        thislist[i][2]= base64.b64decode(thislist[i][2])
+        thislist[i][2]= thislist[i][2].decode('ascii')
+        i+=1
+    return render_template('jinja/children_pages_frontend/pages.html', posts=thislist)
+    
+@app.route('/choosing_a_major') #/[name of the page]
+def choosing_a_major():         # this also needs to be changed
+    conn = mysql.connect()
+    cursor =conn.cursor()
+
+    query = "SELECT * FROM pages WHERE id=98;" #id needs to be the id of the page
+    cursor.execute(query)
+    posts= cursor.fetchall()
+    thislist= []
+    i=0
+    for page in posts:      
+        thislist.insert(i,[])
+        thislist[i].extend(page)
+        thislist[i][2] = thislist[i][2].encode('ascii')
+        thislist[i][2]= base64.b64decode(thislist[i][2])
+        thislist[i][2]= thislist[i][2].decode('ascii')
+        i+=1
+    return render_template('jinja/children_pages_frontend/pages.html', posts=thislist)
+
+    
+@app.route('/transferring') #/[name of the page]
+def transferring():         # this also needs to be changed
+    conn = mysql.connect()
+    cursor =conn.cursor()
+
+    query = "SELECT * FROM pages WHERE id=99;" #id needs to be the id of the page
+    cursor.execute(query)
+    posts= cursor.fetchall()
+    thislist= []
+    i=0
+    for page in posts:      
+        thislist.insert(i,[])
+        thislist[i].extend(page)
+        thislist[i][2] = thislist[i][2].encode('ascii')
+        thislist[i][2]= base64.b64decode(thislist[i][2])
+        thislist[i][2]= thislist[i][2].decode('ascii')
+        i+=1
+    return render_template('jinja/children_pages_frontend/pages.html', posts=thislist)
+
+@app.route('/internships') #/[name of the page]
+def internships():         # this also needs to be changed
+    conn = mysql.connect()
+    cursor =conn.cursor()
+
+    query = "SELECT * FROM pages WHERE id=100;" #id needs to be the id of the page
+    cursor.execute(query)
+    posts= cursor.fetchall()
+    thislist= []
+    i=0
+    for page in posts:      
+        thislist.insert(i,[])
+        thislist[i].extend(page)
+        thislist[i][2] = thislist[i][2].encode('ascii')
+        thislist[i][2]= base64.b64decode(thislist[i][2])
+        thislist[i][2]= thislist[i][2].decode('ascii')
+        i+=1
+    return render_template('jinja/children_pages_frontend/pages.html', posts=thislist)
+    
+@app.route('/applying_for_an_undergraduate_degree') #/[name of the page]
+def applying_for_an_undergraduate_degree():         # this also needs to be changed
+    conn = mysql.connect()
+    cursor =conn.cursor()
+
+    query = "SELECT * FROM pages WHERE id=101;" #id needs to be the id of the page
+    cursor.execute(query)
+    posts= cursor.fetchall()
+    thislist= []
+    i=0
+    for page in posts:      
+        thislist.insert(i,[])
+        thislist[i].extend(page)
+        thislist[i][2] = thislist[i][2].encode('ascii')
+        thislist[i][2]= base64.b64decode(thislist[i][2])
+        thislist[i][2]= thislist[i][2].decode('ascii')
+        i+=1
+    return render_template('jinja/children_pages_frontend/pages.html', posts=thislist)   
+    
+@app.route('/admission') #/[name of the page]
+def admission():         # this also needs to be changed
+    conn = mysql.connect()
+    cursor =conn.cursor()
+
+    query = "SELECT * FROM pages WHERE id=102;" #id needs to be the id of the page
+    cursor.execute(query)
+    posts= cursor.fetchall()
+    thislist= []
+    i=0
+    for page in posts:      
+        thislist.insert(i,[])
+        thislist[i].extend(page)
+        thislist[i][2] = thislist[i][2].encode('ascii')
+        thislist[i][2]= base64.b64decode(thislist[i][2])
+        thislist[i][2]= thislist[i][2].decode('ascii')
+        i+=1
+    return render_template('jinja/children_pages_frontend/pages.html', posts=thislist)    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+    
+#this is a special case because it shows all of the news    
 @app.route('/news_cs') #/[name of the page]
 def new_cs():         # this also needs to be changed
     conn = mysql.connect()
@@ -430,6 +577,8 @@ def new_cs():         # this also needs to be changed
         thislist[i][2]= thislist[i][2].decode('ascii')
         i+=1
     return render_template('jinja/children_pages_frontend/news_cs.html', posts=thislist)
+    
+
 
 #End of the pages  !!!!!!!!!!!!----------------------------------------    
 

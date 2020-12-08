@@ -1,0 +1,87 @@
+{% extends "jinja/base_template.html" %}
+{% block content %}
+<div class="mainBody news container">
+    <div class="row">
+    	<div class="col"> 
+			{% for row in role %}							//TABLE HAS MULTIPLE ROWS OF DIFFERENT ROLES IN THE FACULTY AND EACH ROW MAY HAVE MULTIPLE SUBROWS FOR ALL THE PEOPLE W/ THAT ROLE
+
+					<div class="my-5 text-center">
+						{% if row[5]== "true" %}			//SOME WAY OF VERIFYING IF "DIRECTOR OF SCHOOL", "ASSOCIATE DIRECTOR OF RESEARCH", ETC. (MAYBE A RADIO BUTTON OR MULTIPLE CHECK BOZES FOR ALL THE POSSIBLE CATEGORIES)
+            				<h1>Director of the School</h1>
+						{% endif %}
+						{% if row[5]== "true" %}
+            				<h1>Associate Director of Research</h1>
+						{% endif %}
+						{% if row[5]== "true" %}
+            				<h1>Professors</h1>
+						{% endif %}
+						{% if row[5]== "true" %}
+            				<h1>Faculty Lecturers</h1>
+						{% endif %}
+						{% if row[5]== "true" %}
+            				<h1>Associate Members</h1>
+						{% endif %}
+						{% if row[5]== "true" %}
+            				<h1>Adjunct Professors</h1>
+						{% endif %}
+						{% if row[5]== "true" %}
+            				<h1>Emeritus Professors</h1>
+						{% endif %}
+						{% if row[5]== "true" %}
+            				<h1>Associate Professors Post-Retirement</h1>
+						{% endif %}
+						{% if row[5]== "true" %}
+            				<h1>Former Professors</h1>
+						{% endif %}
+						{% if row[5]== "true" %}
+            				<h1>In Memoriam</h1>
+						{% endif %}
+          			</div>
+	
+			{% for rows in persons %}
+				<div class="row">
+          			<div class="col-lg-4 col-md-6">
+            			<div class="card m-3">
+              				<div class="card-body" data-toggle="collapse" href="#i{{NUMBER OF THE ROW OF THE PERSON}}" role="button" aria-expanded="false" aria-controls="collapseExample">  //IT JUST NEEDS TO BE A UNIQUE ID MATCHING W/ THE DIV ID AFTER (FOR THE COLLAPSE TO WORK PROPERLLY)
+                				<div class="row mx-auto">
+                					<img src="{{ row[] }}" alt="" class="img-fluid rounded-circle w-50 mb-3 mx-auto">  						//INTRODUCE THE RIGHT PATH STORED IN DB FOR THE PIC
+                				</div>
+				                <div>
+                  					<h3>{{ row[]}}</h3>					//NAME OF PERSON
+                  					<ul>								//FIGURE OUT A GOOD WAY TO STORE THIS IN THE DB!!! AND MAKE RETREIVABLE HERE
+                    					<li>Databases</li>
+                    					<li>Networks</li>
+                    					<li>Parallel and Distributed Systems</li>
+                    					<li>Computer Games</li>
+                  					</ul>
+                				</div>	
+								<div id="i1" class="row p-1 collapse mx-auto">
+                  					<div class="col">
+                    					<div class="row">
+                      						<a href="">Website</a>
+                    					</div>
+                    					<div class="row">
+                      						Office: {{ row[] }}<br>
+                      						Phone: {{ row[] }} <br>
+                      						Email: {{row[]}}
+                    					</div>
+                  					</div>
+                				</div>
+                         	</div>
+						</div>
+          			</div>
+				</div>
+			{% endfor %}
+	{% endfor %}
+	</div>
+   </div>
+</div>
+
+{% endblock %}
+
+
+          
+        
+
+            
+

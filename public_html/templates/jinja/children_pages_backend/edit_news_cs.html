@@ -33,8 +33,6 @@
         tinymce.get('content').setContent(content);
 		document.getElementById("postTitle").value = title;
 		document.getElementById("date").value = date;
-		console.log(is_announcement);
-		console.log(is_award);
 		document.getElementById("is_announcement").checked = (is_announcement == "true");
 		document.getElementById("is_award").checked = (is_award == "true");
 		document.getElementById("picture").value = picture;
@@ -96,13 +94,13 @@
 		<label for="date">Date:</label>
 		<input type="date" id="date" name="date" required>
 		<br>
-		<label for="picture">Address for where the picture is stored :(~/static/images/)</label>
+		<label for="picture">Address where the picture is stored :/../static/images/)</label>
 		<input type="text" id="picture" name="picture">
 		<br>
-		<label for="is_announcement">Announcement?</label>
+		<label for="is_announcement">Is_announcement?</label>
 		<input type="checkbox" id="is_announcement" name="is_announcement">
 		<br>
-		<label for="is_award">Award?</label>
+		<label for="is_award">Is_award?</label>
 		<input type="checkbox" id="is_award" name="is_award">
    </form>
 {% endblock %} 

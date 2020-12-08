@@ -102,6 +102,11 @@ body {
   margin-bottom: 15px;
 }
 
+.BTN {
+  color: black;
+  margin-left: 12px;
+}
+
 .icon {
   display: none;
   padding: 3px;
@@ -310,6 +315,7 @@ body {
 }
 
 .tags {
+  display: inline;
   order: 2;
   font-size: 12px;
   color: #9E0918;
@@ -508,11 +514,12 @@ body {
 }
 
 /*CSS FOR RESEARCH START*/
-.research ul {
-}
+.research ul {}
+
 .research .card-body .col a {
   color: black;
 }
+
 /*CSS FOR RESEARCH END*/
 /*CSS FOR PEOPLE START*/
 .people ul {
@@ -544,3 +551,31 @@ body {
 }
 
 /*CSS FOR PEOPLE END*/
+/*CSS FOR NEWS START*/
+.news .titles {
+  margin-left: -15px;
+}
+.news p {
+  display: inline;
+  font-size: 15px;
+}
+
+.news-element a {
+  text-decoration: none;
+  color: black
+}
+
+.news-element:hover {
+  background: lightgray;
+  border-radius: 3px;
+}
+
+.news-title {
+  display: block;
+}
+
+.news-element {
+  border-bottom: 2px solid rgba(0, 0, 0, 0.5);
+}
+
+/*CSS FOR NEWS END*/
