@@ -88,20 +88,21 @@
 
 {% block fields %} <!-- this is the function that will have to be heavily modified based on the post. -->
 
-   Post title: <input type="text" id="postTitle"></input>
-   <form method="post" action="somepage">
+   <h4>Title of the post:</h4> <input style="margin-top:5px;width: 400px;" type="text" id="postTitle"></input>
+
+   <form style="margin-top:15px;" method="post" action="somepage">
 		<textarea id="content" style="width:100%"></textarea>
 		<br>
 		<label for="date">Date:</label>
 		<input type="date" id="date" name="date" required>
 		<br>
-		<label for="picture">Address where the picture is store :/../static/images/)</label>
+		<label for="picture">Address for where the picture is stored :(~/static/images/)</label>
 		<input type="text" id="picture" name="picture">
 		<br>
-		<label for="is_announcement">is_announcement</label>
+		<label for="is_announcement">Announcement?</label>
 		<input type="checkbox" id="is_announcement" name="is_announcement">
 		<br>
-		<label for="is_award">is_award</label>
+		<label for="is_award">Award?</label>
 		<input type="checkbox" id="is_award" name="is_award">
    </form>
 {% endblock %} 

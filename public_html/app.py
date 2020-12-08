@@ -66,7 +66,7 @@ def login_page():
                 return "invalid_cred"
             
         else:
-            return "invalid_cred"
+            return "noUser"
                    
     return render_template('login.html')
     
@@ -107,6 +107,37 @@ def addAdmin():
         conn.commit()
 
         return ""
+        
+        
+@app.route('/changePassword',methods = ['POST'])  
+def changePassword():
+    if not g.user:
+        return "noUser"
+        
+    old_password = request.form['oldpw']
+    new_password = request.form['newpw']
+        
+    conn = mysql.connect()
+    cursor = conn.cursor()
+        
+    query = "SELECT * from login_info WHERE uname = '{}';".format( g.user )   
+    cursor.execute(query)
+    
+    response = cursor.fetchall()
+    
+    if not bcrypt.checkpw( old_password.encode('utf8'),response[0][ 2 ].encode('utf8') ):
+        return "wrongOldPw"
+        
+    else:
+        salt = bcrypt.gensalt()
+        hashed = bcrypt.hashpw(new_password.encode('utf8'), salt)
+
+        query = "UPDATE login_info SET password =  '{}' WHERE uname = '{}';".format(hashed.decode('utf-8'),g.user)
+        cursor.execute(query)
+        
+        conn.commit()
+
+        return ""        
     
   
 @app.route('/pollAdmins',methods = ['POST'])    
@@ -120,7 +151,7 @@ def pollAdmins():
     
     ans = ""
     for row in cursor.fetchall():
-        ans += "<li>" + str(row[0]) + "</li>"
+        ans += "<li style=\"margin-top:5px;\">" + str(row[0]) + "</li>"
 
     return ans
     

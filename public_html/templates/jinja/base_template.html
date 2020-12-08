@@ -1,85 +1,41 @@
 <!DOCTYPE html>
 <html>
-  <head>
-	  <meta charset="utf-8">
-	  <title>McGill School of Computer Science</title>
-	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	  <link rel="shortcut icon" type="image/x-con" href="/../static/favicon1.ico">
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-	
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-	  <link rel="stylesheet" type="text/css" href="/../static/myStyleSheet.css">
-	<script>
-    		function hamburger(x) {
-      		x.classList.toggle("change");
-    		}
-  	</script>
-  </head>
-  <body>
-  {% include "jinja/header.html" %}
-  {% block content %}{% endblock %}
+<head>
+  <title>McGill School of Computer Science</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" type="image/x-con" href="/../static/favicon1.ico">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-<!---THIS SCRIPT NEEDS TO BE IN HERE (IN THE BODY TAGS)!!!--->
-<script type="text/javascript">
-    var slides = document.querySelectorAll('.slide');
-    var btns = document.querySelectorAll('.btnC');
-    let currentSlide = 1;
 
-    // Javascript for image slider manual navigation
-    var manualNav = function(manual) {
-      slides.forEach((slide) => {
-        slide.classList.remove('active');
-
-        btns.forEach((btn) => {
-          btn.classList.remove('active');
-        });
-      });
-
-      slides[manual].classList.add('active');
-      btns[manual].classList.add('active');
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="/../static/myStyleSheet.css">
+  <script>
+    function hamburger(x) {
+      x.classList.toggle("change");
     }
-
-    btns.forEach((btn, i) => {
-      btn.addEventListener("click", () => {
-        manualNav(i);
-        currentSlide = i;
-      });
-    });
-
-    // Javascript for image slider autoplay navigation
-    var repeat = function(activeClass) {
-      let active = document.getElementsByClassName('active');
-      let i = 1;
-
-      var repeater = () => {
-        setTimeout(function() {
-          [...active].forEach((activeSlide) => {
-            activeSlide.classList.remove('active');
-          });
-
-          slides[i].classList.add('active');
-          btns[i].classList.add('active');
-          i++;
-
-          if (slides.length == i) {
-            i = 0;
-          }
-          if (i >= slides.length) {
-            return;
-          }
-          repeater();
-        }, 10000);
-      }
-      repeater();
-    }
-    repeat();
+	function searchGoogle()
+     {
+      var base = "https://www.google.com/search?q="
+      var param = document.getElementById( "googleIn" ).value;
+      
+      var url = base + param;
+      
+      var win = window.open(url, '_blank');
+      win.focus();
+     }    
   </script>
+</head>
 
-  {% include "jinja/footer.html" %} 
-  </body>
-  </html>
-  
+<body>
+{% include "jinja/header.html" %}
+{% block content %}{% endblock %}
+{% include "jinja/footer.html" %} 
+
+</body>
+
+</html>

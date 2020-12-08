@@ -27,15 +27,19 @@
       document.getElementById( "admin_uname" ).value = "";
       document.getElementById( "admin_pwd" ).value = "";
       document.getElementById( "admin_repwd" ).value = "";
+      
       document.getElementById( "adminToRemove" ).value = "";
       
-      
+      document.getElementById( "admin_oldpw" ).value = ""; 
+      document.getElementById( "admin_newpwd" ).value = "";
+      document.getElementById( "admin_renewpwd" ).value = "";
    }
    
    function clearErrMessages()
    {
       document.getElementById( "addAdminErr" ).innerHTML = "";
       document.getElementById( "delAdminErr" ).innerHTML = "";
+      document.getElementById( "changePwErr" ).innerHTML = "";
    }
 
 	function addNewAdmin()
@@ -165,23 +169,86 @@
                }
                pollAdmins();
                clearFields();
+            }   
+         }
+         
+         
+         function changePassword()
+         {
+            setTimeout(function() { clearErrMessages(); }, 5000);
+            
+            var adminOldPw = document.getElementById( "admin_oldpw" ).value;
+            var adminNewPw = document.getElementById( "admin_newpwd" ).value;
+            var adminReNewPw = document.getElementById( "admin_renewpwd" ).value;
+            
+            if( adminNewPw != adminReNewPw )
+            {
+               document.getElementById( "changePwErr" ).innerHTML = "Passwords don't match!";
+               
+               clearFields();
+            }
+            else if( admin_renewpwd.length <= 4 )
+            {
+               document.getElementById( "changePwErr" ).innerHTML = "Passwords needs to be at least 5 characters long!";
+               
+               clearFields();
+            }
+            else
+            {
+               try
+               {
+                  asyncRequest = new XMLHttpRequest();
+                  
+                  asyncRequest.addEventListener( "readystatechange",onChange,false );
+                  asyncRequest.open( "POST","/changePassword",true );
+                  asyncRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                  asyncRequest.send( "oldpw=" + adminOldPw + "&newpw=" + adminNewPw ); 
+               }
+               catch( exection ){ alert( "Request failed" ); }
+            }
+         }
+         
+         function onChange()
+         {
+            if( asyncRequest.readyState == 4 && asyncRequest.status == 200 )
+            {
+               
+               if( asyncRequest.responseText == "wrongOldPw" )
+               {
+                    document.getElementById( "changePwErr" ).innerHTML = "Wrong current password!";
+               }
+               else if( asyncRequest.responseText == "noUser" )
+               {
+                    document.getElementById( "changePwErr" ).innerHTML = "No user logged in!";
+               }
+               else
+               {
+                  document.getElementById( "changePwErr" ).innerHTML = "Password changed successfully!";
+               }
+               clearFields();
             }  
-             
             
          }
 	</script>
    
    <style>
-   nav ul{
-      height:200px; 
+   .mylist ul{
+      height:300px; 
       width:50%; 
       overflow:hidden; 
       overflow-y:scroll;
       margin-top: 35px;
       margin-left: 20px;
+      background-color: white;
+      border-radius: 10px;
+      padding-left:20px;
+      padding-top:10px;
+      padding-bottom:10px;
+      list-style-type:none;
       }
    
    ul li{
+      list-style-type:none;
       font-size: 20px;
       font-family: Calibri, Candara, sans-serif;
       }
@@ -203,54 +270,98 @@
 	.button:hover {
   text-decoration: underline;
    
+   tr.spaceUnder>td {
+  padding-bottom: 20px;
+   }
+   tr.spaceUnder>input {
+  padding-bottom: 20px;
+   }
+   
+  
 
    
    </style>
    
    <body>
 	{% include "jinja/header.html" %}
-      <div style="margin-left:50px; margin-top:50px; width: 500px;">
+   
+   
+   <h1 style="font-family: Calibri, Candara, sans-serif; margin-top:30px;margin-left:20px;">Welcome, {{g.user}}!</h1>
+   
+   
+   <table style="margin-top:45px;margin-bottom:25px;width:100%"><tr>
+   <td style="width: 30%;vertical-align: top;">
+      <div style="margin-left:50px; ">
          <h2 style="font-family: Calibri, Candara, sans-serif;">CREATED ADMINS</h2>
          
-         <nav>
+         <div class = "mylist">
             <ul id="admins">
             </ul>
-        </nav>
+        </div>
       </div>
-       
-      <div style=" margin-top:50px;">
+   </td>
+   <td style = "vertical-align: top;">
+      <div >
          <h2 style="font-family: Calibri, Candara, sans-serif;">ADD NEW ADMIN</h2>
-      	<table >
-      	      <tr >
-      			   <td> Username: </td>
-      		      <td><input type="text"  id="admin_uname" name="uname"></td>
+      	<table style=" margin-top: 35px;margin-left: 20px;font-family: Calibri, Candara, sans-serif;">
+      	      <tr class="spaceUnder">
+      			   <td style=" padding-bottom: 15px;font-size:18px;"> Username: </td>
+      		      <td ><input style="margin-left:30px;margin-bottom: 15px;" type="text"  id="admin_uname" name="uname"></td>
+      		   </tr>
+      		   <tr >
+      			   <td style=" padding-bottom:15px;font-size:18px;"> Password: </td>
+      			   <td ><input style="margin-left:30px;margin-bottom: 15px;" type="password" id="admin_pwd" name="pwd"></td>
+      		   </tr>
+               <tr>
+      			   <td style="font-size:18px;"> Repeat Password: </td>
+      			   <td><input  style="margin-left:30px;" type="password" id="admin_repwd" name="pwd"></td>
       		   </tr>
       		   <tr>
-      			   <td> Password: </td>
-      			   <td><input type="password" id="admin_pwd" name="pwd"></td>
-      		   </tr>
-               <tr >
-      			   <td > Repeat Password: </td>
-      			   <td><input type="password" id="admin_repwd" name="pwd"></td>
-      		   </tr>
-      		   <tr>
-                  <td colspan=2><button type="button" class="button" onclick="addNewAdmin()">Add</button></td>
+                  <td colspan=2><button style="margin-left:90px;margin-top:30px;" type="button" class="button" onclick="addNewAdmin()">Add</button></td>
       		   </tr>
       	</table>
          <p style="margin-top:5px; position: absolute;" id="addAdminErr"><p>  
-      
+        </div >
 
-         <h2 style="padding-top:50px; font-family: Calibri, Candara, sans-serif;">REMOVE ADMIN</h2>   
+         <h2 style="margin-top: 40px;font-family: Calibri, Candara, sans-serif;">REMOVE ADMIN</h2>   
          
-         Name: <input type="text"  id="adminToRemove" name="uname"> 
-         <button  class="button" type="button" onclick="removeAdmin()">Remove</button>   
+         <table style="margin-top: 35px;margin-left: 20px;font-family: Calibri, Candara, sans-serif;">
+      	      <tr >
+      			   <td style="font-size:18px;"> Name: </td>
+      		      <td ><input style="margin-left:30px;" type="text" id="adminToRemove" name="uname"> </td>
+      		   </tr>
+               <tr>
+                   <td colspan=2><button  class="button" style="margin-left:80px;margin-top:20px;" type="button" onclick="removeAdmin()">Remove</button></td>
+               </tr>
+         </table>
+        
          <p style="margin-top:5px; position: absolute;"id="delAdminErr"><p>
-       
-       </div>
-
-   <div > 
-      
-      <p style="margin-top:30px;">Session info:{{g.user}}</p>
+      </td>
+      <td style = "vertical-align: top;">
+      <div >
+         <h2 style="font-family: Calibri, Candara, sans-serif;">CHANGE PASSWORD</h2>
+      	<table style="margin-top: 35px;margin-left: 20px;font-family: Calibri, Candara, sans-serif;">
+               <tr class="spaceUnder">
+      			   <td style=" padding-bottom: 15px;font-size:18px;"> Current Password: </td>
+      		      <td ><input style="margin-left:30px;margin-bottom: 15px;" type="password"  id="admin_oldpw" name="uname"></td>
+      		   </tr>
+      		   <tr >
+      			   <td style=" padding-bottom:15px;font-size:18px;"> New Password: </td>
+      			   <td ><input style="margin-left:30px;margin-bottom: 15px;" type="password" id="admin_newpwd" name="pwd"></td>
+      		   </tr>
+               <tr>
+      			   <td style="font-size:18px;"> Repeat Password: </td>
+      			   <td><input  style="margin-left:30px;" type="password" id="admin_renewpwd" name="pwd"></td>
+      		   </tr>
+      		   <tr>
+                  <td colspan=2><button style="margin-left:90px;margin-top:30px;" type="button" class="button" onclick="changePassword()">Change Password</button></td>
+      		   </tr>
+      	</table>
+         <p style="margin-top:5px; position: absolute;" id="changePwErr"><p>  
+        </div >
+     </td>
+      </tr></table>
+     
             
    	{% include "jinja/footer.html" %}
    </div>

@@ -3,18 +3,22 @@
 <head>
   <script src="https://cdn.tiny.cloud/1/l0peymszeqahan90ynut0hds27003nt2uikaoyeyf8bdz8vr/tinymce/5/tinymce.min.js" referrerpolicy="origin">
   </script>
-  <meta charset="utf-8">
-	  <title>McGill School of Computer Science</title>
-	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	  <link rel="shortcut icon" type="image/x-con" href="/../static/favicon1.ico">
-	  <link rel="stylesheet" type="text/css" href="/../static/myStyleSheet.css">
-	  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<meta charset="utf-8">
+		<title>McGill School of Computer Science</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="shortcut icon" type="image/x-con" href="/../static/favicon1.ico">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="/../static/myStyleSheet.css">
 	<script>
 		function hamburger(x) {
 		  x.classList.toggle("change");
-		  document.getElementById("myDropDown").classList.toggle("show");
 		}
 	</script>
+   
 </head>
 <!-- This is the script tag for the backend fonctionality JS -->
 <script>
@@ -22,12 +26,21 @@
 	var TABLE = "{% block TABLE %}{% endblock %}";                                                                       //Var table will have to be defined in the children templates.
 	
      tinymce.init({
+       plugins: [
+    "a11ychecker advcode casechange formatpainter",
+    "linkchecker autolink lists checklist",
+    "media mediaembed pageembed permanentpen",
+    "powerpaste table advtable tinymcespellchecker"
+  ],
+  toolbar: "formatselect | fontselect | bold italic strikethrough forecolor backcolor formatpainter | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | link insertfile image | removeformat | code | addcomment | checklist | casechange",
      selector:'textarea',
      formats: {
         bold : {inline : 'b' },
         italic : {inline : 'i' },
-        underline : {inline : 'u'},
+        underline : {inline : 'u'}
     },
+     min_height: 280,
+     max_width: 600,
      init_instance_callback : function(editor) { editor.setContent("");}
 	});
    
@@ -74,9 +87,11 @@
 	}  
    
    function refreshRowsDel() {
+      setTimeout(function() { clearSaveMessages(); }, 5000);
         if( asyncRequest.readyState == 4 && asyncRequest.status == 200 )
         {
-	   tinymce.get('content').setContent( "" );
+          document.getElementById( "saveConfirm" ).innerHTML = "Post deleted successfully!";
+	       tinymce.get('content').setContent( "" );
            ID = "";
            initRows();
         }
@@ -97,6 +112,8 @@
       asyncRequest.send( "ID=" + ID ) 
 	}
 	function savedConfirmation(){
+      setTimeout(function() { clearSaveMessages(); }, 5000);
+
       if( asyncRequest.readyState == 4 && asyncRequest.status == 200 ){
           document.getElementById( "saveConfirm" ).innerHTML = asyncRequest.responseText;
 		  initRows();
@@ -118,6 +135,10 @@
           //document.getElementById( "saveConfirm" ).innerHTML = asyncRequest.responseText;
       } 
    }
+   
+   function clearSaveMessages(){
+      document.getElementById( "saveConfirm" ).innerHTML = "";
+   }
 {% block ajaxAdd %} <!-- this is the function that will have to be heavily modified based on the post. -->
 {% endblock %}  
   
@@ -128,28 +149,57 @@
 {% endblock %}
 
 </script>
+
+
+<style>
+   .button {
+  background-color: #ED1B2F;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+	.button:hover {
+  text-decoration: underline;
+  
+  
+</style>
+
+
 <body>
 	{% include "jinja/header_backend.html" %}
-	<br><br>
-	<a href="/">go back to homepage</a> </br>
-	<button onclick="ajaxDelete()">Delete</button>
-	<button onclick="ajaxSave()">Save</button>
-	<button onclick="ajaxAdd()">Add</button>
-
-   <p id="saveConfirm"></p>
-	{% block fields %} <!-- this block will be replaced by all the html which describes the fields of the post type.  -->
-	{% endblock %} 
-
-
-   List of all posts in {% block page_name %}{% endblock %}:
-   <table id="newPosts" style="border:1px solid black"></table> <!-- Generate rows of the table on window load via JS  -->
-   <br><br>
+   <div style="margin-left: 30px;margin-right: 30px;">
+      <h1 style="margin-top:30px;margin-bottom:10px;">Welcome {{g.user}}!</h1>
+      
+      <table style="width: 100%;margin-bottom:10px;"><tr>
+         <td style="width:50px;"><button class="button" onclick="ajaxAdd()">Add</button></td>
+      	<td style="width:50px;"><button class="button" onclick="ajaxSave()">Save</button></td>
+      	<td style="width:50px;"><button class="button" onclick="ajaxDelete()">Delete</button></td>
+         <td style="width:70%;"></td>
+         <td style="width:50px;"><button" class="button" onclick="logout()">Logout</button></td>
+      </tr></table>
+      
+      <p style="margin-left:20px;position:absolute;"id="saveConfirm"></p>
+      
+      <table style="margin-left:20px;margin-right:20px; width:100%;"><tr>
+         <td style="vertical-align: top;width:30%;">
+            <p style="font-size:18px; margin-top:40px;" >Posts in {% block page_name %}{% endblock %}:</p>
+            <table style="padding:30px;" id="newPosts" ></table> <!-- Generate rows of the table on window load via JS  -->
+         </td>
+         <td style="margin-right:20px; padding-right:40px;">
+         	{% block fields %} <!-- this block will be replaced by all the html which describes the fields of the post type.  -->
+         	{% endblock %} 
+         </td>
+      </tr></table>
+   </div>
     {% include "jinja/footer.html" %}
+
 </body>
-
-
-<!-- this needs to be on all pages for the backend -->
-Session info:
-{{g.user}}
-<button onclick="logout()">Logout</button>
 </html>

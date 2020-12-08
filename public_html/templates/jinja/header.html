@@ -1,6 +1,7 @@
- <div id="header" class="header container-fluid">
+ <!---HEADER OF THE WEBSITE --->
+  <div id="header" class="header container-fluid">
     <nav class="navbar navbar-expand-md">
-      <a class="navbar-brand" href="#">
+      <a class="navbar-brand" href="/">
         <img id="logo" src="/../static/logo-header.png">
       </a>
       <div id="icon" class="icon" onclick="hamburger(this)" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,11 +34,61 @@
               Academic
             </button>
             <div class="dropdown-menu">
-              <a class="dropdown-item" href="#">Undergraduate</a>
-              <a class="dropdown-item" href="#">Graduate</a>
+              <div class="dropdown dropright">
+                <button type="button" class="btn btn-light BTN" data-toggle="dropdown">
+                  Undergraduate
+                </button>
+                <div class="dropdown-menu border-dark">
+                  <a class="dropdown-item" href="#">Overview</a>
+                  <a class="dropdown-item" href="#">Information for Incoming Students</a>
+                  <a class="dropdown-item" href="#">Remote Learning</a>
+                  <a class="dropdown-item" href="#">FAQ</a>
+                  <a class="dropdown-item" href="#">Advising</a>
+                  <a class="dropdown-item" href="#">COMP 202/204/208</a>
+                  <a class="dropdown-item" href="#">Streams</a>
+                  <a class="dropdown-item" href="#">Bachelor of Science</a>
+                  <a class="dropdown-item" href="#">Bachelor of Arts</a>
+                  <a class="dropdown-item" href="#">Bachelor of Arts and Science</a>
+                  <a class="dropdown-item" href="#">Minor Computer Science</a>
+                  <a class="dropdown-item" href="#">Games</a>
+                  <a class="dropdown-item" href="#">Research</a>
+                  <a class="dropdown-item" href="#">Internships & Careers</a>
+                  <a class="dropdown-item" href="#">Preparation for Graduate Studies</a>
+                </div>
+              </div>
+              <div class="dropdown dropright">
+                <button type="button" class="btn btn-light BTN" data-toggle="dropdown">
+                  Graduate
+                </button>
+                <div class="dropdown-menu border-dark">
+                  <a class="dropdown-item" href="#">Overview</a>
+                  <a class="dropdown-item" href="#">Masters</a>
+                  <a class="dropdown-item" href="#">Ph. D.</a>
+                  <a class="dropdown-item" href="#">Admission</a>
+                  <a class="dropdown-item" href="#">Applying</a>
+                  <a class="dropdown-item" href="#">FAQ</a>
+                </div>
+              </div>
               <a class="dropdown-item" href="#">Courses</a>
-              <a class="dropdown-item" href="#">Teaching Assistant</a>
-              <a class="dropdown-item" href="#">Funding</a>
+              <div class="dropdown dropright">
+                <button type="button" class="btn btn-light BTN" data-toggle="dropdown">
+                  Teaching Ass.
+                </button>
+                <div class="dropdown-menu border-dark">
+                  <a class="dropdown-item" href="#">TA & Research Assistant</a>
+                  <a class="dropdown-item" href="#">TA Awards</a>
+                </div>
+              </div>
+              <div class="dropdown dropright">
+                <button type="button" class="btn btn-light BTN" data-toggle="dropdown">
+                  Funding
+                </button>
+                <div class="dropdown-menu border-dark">
+                  <a class="dropdown-item" href="#">Financial Information</a>
+                  <a class="dropdown-item" href="#">Graduate Scholarships</a>
+                  <a class="dropdown-item" href="#">Expense Reports</a>
+                </div>
+              </div>
             </div>
           </div>
           <div class="dropdown">
@@ -56,7 +107,17 @@
             <div class="dropdown-menu">
               <a class="dropdown-item" href="#">Faculty</a>
               <a class="dropdown-item" href="#">Staff</a>
-              <a class="dropdown-item" href="#">Community</a>
+              <div class="dropdown dropright">
+                <button type="button" class="btn btn-light BTN" data-toggle="dropdown">
+                  Community
+                </button>
+                <div class="dropdown-menu border-dark">
+                  <a class="dropdown-item" href="#">Women@CS</a>
+                  <a class="dropdown-item" href="#">Summer Camp</a>
+                  <a class="dropdown-item" href="#">CSUS</a>
+                  <a class="dropdown-item" href="#">CSGS</a>
+                </div>
+              </div>
             </div>
           </div>
           <div class="dropdown">
@@ -107,8 +168,8 @@
           </div>
         </ul>
         <form class="form-inline">
-          <input class="form-control-sm mr-sm-0" type="search" placeholder="Search" aria-label="Search" style="max">
-          <button class="btn" type="submit" style="padding: 0"><span id="search" class="material-icons">
+          <input id="googleIn" class="form-control-sm mr-sm-0" type="search" placeholder="Search" aria-label="Search" style="max">
+          <button onclick="searchGoogle()" class="btn" type="submit" style="padding: 0"><span id="search" class="material-icons">
               search
             </span></button>
         </form>
