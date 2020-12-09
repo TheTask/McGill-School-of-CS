@@ -21,13 +21,14 @@
 		var posIs_announcement = response.search("&!is_announcement=");
 		var posIs_award = response.search("&!is_award=");
 		var posContent= response.search("&!content=");
-		
+		var posLink= response.search("&!link=");
 		
 		var title = response.slice(posTitle+8,posDate);
 		var date = response.slice(posDate+7,posPicture);
 		var picture = response.slice(posPicture+10,posIs_announcement);
 		var is_announcement = response.slice(posIs_announcement+18,posIs_award);
-		var is_award = response.slice(posIs_award+11,posContent);
+		var is_award = response.slice(posIs_award+11,posLink);
+		var link = response.slice(posLink+7,posContent);
 		var content= response.slice(posContent+10,);
 		
         tinymce.get('content').setContent(content);
@@ -36,6 +37,7 @@
 		document.getElementById("is_announcement").checked = (is_announcement == "true");
 		document.getElementById("is_award").checked = (is_award == "true");
 		document.getElementById("picture").value = picture;
+		document.getElementById("link").value = link;
 		 
 		 
       }  
@@ -52,13 +54,13 @@
       	 asyncRequest.open( "POST","/saveOrAdd_news_cs",true );
       	 asyncRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 		 var content = encodeURIComponent(tinyMCE.get('content').getContent());
-		 var date,picture,is_announcement,is_award;
+		 var date,picture,is_announcement,is_award,link;
 		 date = document.getElementById("date").value;
 		 is_announcement = document.getElementById("is_announcement").checked;
 		 is_award = document.getElementById("is_award").checked;
 		 picture = document.getElementById("picture").value;
-		 console.log("title=" + postTitle + "&saveOrAdd=add"+ "&date="+date +"&is_announcement="+is_announcement+ "&is_award="+ is_award +"&picture="+picture+ "&id=" + ID +"&content=" + content);
-      	 asyncRequest.send( "title=" + postTitle + "&saveOrAdd=add"+ "&date="+date +"&is_announcement="+is_announcement+ "&is_award="+ is_award +"&picture="+picture+ "&id=" + ID +"&content=" + content);
+		 link = document.getElementById("link").value;
+      	 asyncRequest.send( "title=" + postTitle + "&saveOrAdd=add"+ "&date="+date +"&is_announcement="+is_announcement+ "&is_award="+ is_award +"&picture="+picture+ "&id=" + ID +"&link="+link+"&content=" + content);
 	 
 		}
    } 
@@ -79,7 +81,8 @@
 			is_announcement = document.getElementById("is_announcement").checked;
 			is_award = document.getElementById("is_award").checked;
 			picture = document.getElementById("picture").value;
-			asyncRequest.send( "saveOrAdd=save" + "&id=" + ID + "&title=" + postTitle +"&date="+date +"&is_announcement="+is_announcement+ "&is_award="+ is_award +"&picture="+picture+ "&content=" + content ); 
+			link = document.getElementById("link").value;
+			asyncRequest.send( "saveOrAdd=save" + "&id=" + ID + "&title=" + postTitle +"&date="+date +"&is_announcement="+is_announcement+ "&is_award="+ is_award +"&picture="+picture+ "&link="+link+ "&content=" + content ); 
 		}
 	}
 {% endblock %}  
@@ -94,7 +97,7 @@
 		<label for="date">Date:</label>
 		<input type="date" id="date" name="date" required>
 		<br>
-		<label for="picture">Address where the picture is stored :/../static/images/)</label>
+		<label for="picture">Address where the picture is stored :/../static/images/news/)</label>
 		<input type="text" id="picture" name="picture">
 		<br>
 		<label for="is_announcement">Is_announcement?</label>
@@ -102,5 +105,8 @@
 		<br>
 		<label for="is_award">Is_award?</label>
 		<input type="checkbox" id="is_award" name="is_award">
+		<br>
+		<label for="link">URL of the news post :/)</label>
+		<input type="text" id="link" name="link">
    </form>
 {% endblock %} 

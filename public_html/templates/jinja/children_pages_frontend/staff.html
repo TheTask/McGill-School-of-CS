@@ -1,0 +1,46 @@
+{% extends "jinja/base_template.html" %}
+{% block content %}
+<div class="mainBody people container">
+    <div class="row">
+    	<div class="col">
+			<div class="my-5 mx-auto text-center"> 
+				<h1>Staff</h1>
+			</div>
+			<div class="row">
+			{% for row in posts %}
+				{% if row[8]== "true" %}		
+								
+          			<div class="col-lg-4 col-md-6">
+            			<div class="card m-3">
+              				<div class="card-body" data-toggle="collapse" href="#i{{ row[0] }}" role="button" aria-expanded="false" aria-controls="collapseExample"> {# //ID OF THE PERSON #}
+                				<div class="row mx-auto">
+                					<img src="/../static/images/people/{{ row[4]|safe }}" alt="" class="img-fluid rounded-circle w-50 mb-3 mx-auto">  			{# //RIGHT PATH STORED FOR THE PIC #}
+                				</div>
+				                <div>
+                  					<h3>{{ row[1] }}</h3>					{# //NAME OF PERSON #}
+									<div>{{ row[2]|safe }}</div>					{# //CONTENT/FIELDS OF THE PERSON #}
+                   				</div>	
+								<div id="i{{ row[0] }}" class="row p-1 collapse mx-auto">
+                  					<div class="col">
+                    					<div class="row">
+                      						<a href="{{ row[3]|safe }}">Website</a>		{# //WEBSITE OF THE PERSON #}
+                    					</div>
+                    					<div class="row">					{# //CONTACT INFO OF THE PERSON #}
+                      						Office: {{ row[9] }}<br>
+                      						Phone: {{ row[10] }} <br>
+                      						Email: {{ row[11] }}
+                    					</div>
+                  					</div>
+                				</div>
+                         	</div>
+						</div>
+          			</div>
+				
+				{% endif %}
+			{% endfor %}
+			</div>
+		</div>
+   </div>
+ </div>
+
+{% endblock %}

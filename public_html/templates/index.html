@@ -36,59 +36,44 @@
           </div>
           <!--image img-slider end-->
           <div class="moreNews">
-            <a href="">View More News</a>
+            <a href="news_cs">View More News</a>
           </div>
         </div>
-        <div class="titles">events<div class="inRed">@cs</div>
-        </div>
-        <div class="eventsCS">
-          <div class="events row">
-            <div class="col-2">
-              <img src="https://img.icons8.com/plasticine/100/000000/calendar.png" />
-            </div>
-            <div class="col">
-              <div class="row">
-                <a href="">Understanding the Nanoscopic Structural Framework of Brain Astrocytes</a>
-              </div>
-              <div class="row">
-                <div class="tags">Colloquium</div>
-                <div class="tags">something</div>
-              </div>
-            </div>
-          </div>
-          <div class="events row">
-            <div class="col-2">
-              <img src="https://img.icons8.com/plasticine/100/000000/calendar.png" />
-            </div>
-            <div class="col">
-              <div class="row">
-                <a href="">Virtual Collaboration Techniques to Catalyze Open Innovation</a>
-              </div>
-              <div class="row">
-                <div class="tags">Colloquium</div>
-              </div>
-            </div>
-          </div>
-          <div class="events row">
-            <div class="col-2">
-              <img src="https://img.icons8.com/plasticine/100/000000/calendar.png" />
-            </div>
-            <div class="col">
-              <div class="row">
-                <a href="">McGill IT Services Virtual Fair</a>
-              </div>
-              <div class="row">
-                <div class="tags">Colloquium</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col">
 
+
+        <div class="titles">events<div class="inRed">@cs</div></div>
+        <div class="eventsCS" >
+          <div class="events row" style="border:none">
+         	<div class="col">
+					{% for row in posts %}
+					<div  class="row">
+					<div class="col-1">
+						<img src="https://img.icons8.com/plasticine/100/000000/calendar.png" class="mx-auto d-block">
+					</div>
+			<div class="col-11">
+            <div class="news-element">
+              <a href="{{ row[7] }}"> <!-- Add column on news_cs table for the link to the page -->
+                <h6 class="news-title">{{ row[1] }}</h6>
+                <p>Date: {{ row[3] }}</p>
+				{% if row[5]== "true" %} 
+					<div class="tags">announcement</div>
+				{% endif %}
+				{% if row[6]== "true" %} 
+					<div class="tags">award</div>
+				{% endif %}
+              </a>
+            </div>
+			</div>
+			</div>
+			{% endfor %}
+            </div>
+          </div>
+		</div>
+        </div>
       </div>
+
+      <div class="col"></div>
     </div>
-  </div>
   <script type="text/javascript">
     var slides = document.querySelectorAll('.slide');
     var btns = document.querySelectorAll('.btnC');

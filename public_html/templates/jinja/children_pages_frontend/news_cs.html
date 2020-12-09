@@ -4,13 +4,16 @@
   <div class="mainBody news container">
     <div class="row">
       <div class="col">
+
         <div class="titles">News<div class="inRed">@cs</div>
         </div>
+
         <div class="row">
           <div class="col p-3 card">
+
 			{% for row in posts %}
             <div class="news-element">
-              <a href=""> <!-- Add column on news_cs table for the link to the page -->
+              <a href="{{ row[7] }}"> <!-- Add column on news_cs table for the link to the page -->
                 <h6 class="news-title">{{ row[1] }}</h6>
                 <p>Date: {{ row[3] }}</p>
 				{% if row[5]== "true" %} 
@@ -19,12 +22,13 @@
 				{% if row[6]== "true" %} 
 					<div class="tags">award</div>
 				{% endif %}
-				<p>{{ row[2]|safe }} </p>
               </a>
             </div>
 			{% endfor %}
+
           </div>
         </div>
+
       </div>
     </div>
   </div>

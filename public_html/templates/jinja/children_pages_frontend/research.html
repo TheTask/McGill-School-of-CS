@@ -1,0 +1,35 @@
+{% extends "jinja/base_template.html" %}
+{% block content %}
+
+<style>
+	.card:hover {
+		box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+	}
+					
+	.header5 {
+		display:block; 
+		padding-top: 5px;
+	}
+</style>
+
+<div class="mainBody research container">
+    <div class="row">
+		{% for row in posts %}
+		<div class="col-lg-4 col-md-6">
+			<div class="card m-1" data-toggle="collapse" href="#i{{ row[0]|safe }}" role="button" aria-expanded="false" aria-controls="collapseExample">
+				<img class="card-img-top" src="/../static/images/research_areas/{{ row[3]|safe }}" alt="AI image">
+				<div class="card-body">
+					<h5 class="card-title">{{ row[1] }}</h5>					
+					<div id="i{{ row[0] }}" class="row p-1 collapse">			
+						<div class="col">{{ row[2]|safe }}</div>
+					</div>
+				</div>
+			</div>
+    	</div>
+		{% endfor %}
+	</div>
+</div>
+
+{% endblock %}          
+       
+  

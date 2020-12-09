@@ -9,14 +9,13 @@
 			.card1 {
 				padding: 10px;
 				padding-left: 15px;
-				padding-right: 15px;
+				padding-right: 25px;
 				border-radius: 10px;
 				border-radius: 5px;
 				background: white;
-				line-height: 1.5;
 			}
 			ul {
-				padding-left: 25px;
+				padding-left: 30px
 			}
 			.titleSmall {
   				background: rgb(237,27,47);
@@ -30,11 +29,48 @@
   				border-right: none;
   				letter-spacing: 2px;
 				color: #9E0918;
+				font-size: 35px;
 			}
+			img {
+				max-width:400px;
+			}
+			@media (max-width: 768px) {
+				img {
+					width: 50%;
+				}
+			}
+			@media (max-width: 576px) {
+				img {
+					width: 150px;
+				}
+			}
+
 		</style>
 
-		<div class="card1">
-			<h1 class="titleSmall">{{ row[1] }} </h1>
+		<div class="card1 container">
+			<div class="row">
+				<div class="col">
+					<h1 class="titleSmall">{{ row[1] }} </h1>
+				</div>
+			</div>			
+			<div class="row align-items-end">
+				<div class="col-md-8 col-lg-10">
+					<img src="/../static/images/news/{{ row[4]|safe }}" alt="" class=" rounded mx-auto d-block"/>
+			 	</div>
+				<div class="col-md-4 col-lg-2 pl-2" style="padding:10px;">
+					<div class="row align-items-start ml-1">
+						<p><strong>Posted on: {{ row[3] }} </strong> </p>
+					</div>
+					<div class="row ml-1">
+						{% if row[5]== "true" %} 
+							<div class="tags">announcement</div>
+						{% endif %}
+						{% if row[6]== "true" %} 
+							<div class="tags">award</div>
+						{% endif %}
+					</div>
+				</div>
+			</div>
 			{{ row[2]|safe }} 
 		</div>
 	{% endfor %}
